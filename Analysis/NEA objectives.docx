@@ -12,19 +12,19 @@ My objectives:
 	•	Also use WPF to display a move by changing the position of the image that represents the piece being moved.
 	•	Allow the user to move pieces.
 	•	Allow the user to select a piece to move.
-	•	Show the user all possible moves (1.2.3).
-	•	Allow the user to unselect a piece and instead select a different piece and display that piece’s possible moves (1.2.3).
-	•	Finally allow the user to select a move and then move the piece to the desired position (1.2.4).
+	•	Show the user all possible moves.
+	•	Allow the user to unselect a piece and instead select a different piece and display that piece’s possible moves.
+	•	Finally allow the user to select a move and then move the piece to the desired position.
 	•	Create an algorithm that analyses for check/checkmate. 
 	•	To analyse for check, before the user or computer makes a move traverse through the tree of all possible moves of the opponent and if any involve taking the current player’s king, restrict possible moves to those that protect the king.
-	•	To analyse for checkmate the process in 1.4.1 is used, along with analysing the possible moves on the next go. See the flowcharts in the modelling section for more details.
+	•	To analyse for checkmate the process is used, along with analysing the possible moves on the next go. See the flowcharts in the modelling section for more details.
 	•	Allow the user to play Chess over networks.
 	•	Create a WebSocket server that will receive and send data.
 	•	Configure the server to receive data (a player’s move) and send said data to the other player.
 	•	Configure the server to send and receive data that represents a change in game state (E.g. checkmate, resignation)
 	•	Allow both clients to connect to the created WebSocket server and send data to/receive data from it 
 	•	Allow the user to play Chess against a computer in a tutorial mode.
-	•	Use an algorithm like (1.1) where the best moves a player can make is found.
+	•	Use an algorithm where the best moves a player can make is found.
 	•	The algorithm will find the best move a player can make (which move has the most value) and return the tile coordinate to move to, and the piece to move.
 	•	Change the colour of the returned piece and the tile that the algorithm recommends moving to.
 	•	Also allow the user to make their own move, they are not forced to play the recommended move.
