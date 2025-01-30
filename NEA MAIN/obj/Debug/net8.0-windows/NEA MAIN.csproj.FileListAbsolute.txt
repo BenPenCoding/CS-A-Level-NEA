@@ -1,0 +1,21 @@
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\bin\Debug\net8.0-windows\NEA MAIN.exe
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\bin\Debug\net8.0-windows\NEA MAIN.deps.json
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\bin\Debug\net8.0-windows\NEA MAIN.runtimeconfig.json
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\bin\Debug\net8.0-windows\NEA MAIN.dll
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\bin\Debug\net8.0-windows\NEA MAIN.pdb
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\MainWindow.g.cs
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN_MarkupCompile.cache
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN_MarkupCompile.lref
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\MainWindow.baml
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.g.resources
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.AssemblyInfoInputs.cache
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.AssemblyInfo.cs
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.csproj.CoreCompileInputs.cache
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.sourcelink.json
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.dll
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\refint\NEA MAIN.dll
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.pdb
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\NEA MAIN.genruntimeconfig.cache
+C:\Users\benpe\Source\Repos\BenPenCoding\CS-A-Level-NEA\NEA MAIN\obj\Debug\net8.0-windows\ref\NEA MAIN.dll
