@@ -1,11 +1,10 @@
 import pygame as pg
 
 class Piece():
-	def __init__(self, pieceType, column, file):
+	def __init__(self, pieceType, file, column):
 		self.pieceType = pieceType
-		self.column = column
 		self.file = file
-		
+		self.column = column
 
 class Move():
 
