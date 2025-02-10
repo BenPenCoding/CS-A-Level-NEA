@@ -38,12 +38,12 @@ class Piece():
 class Move():
 	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares the:
 		pieceTypeDict = {"Knight":"N",					#dictionary that the program uses to determine the algebraic notation of a piece type
-				"Queen": "Q",		
-				"King": "K",
-				"Bishop": "B",
-				"Pawn":"",
-				"Empty":"",
-				"Rook":"R"}
+				"Queen": "Q",					#
+				"King": "K",					#
+				"Bishop": "B",					#
+				"Pawn":"",					#
+				"Empty":"",					#
+				"Rook":"R"}					#
 		self.startPiece = startPiece					#piece to move
 		self.endPiece = endPiece					#piece to replace with startPiece (could be a piece or an empty grid)
 		self.startPieceNotation = pieceTypeDict[self.startPiece]	#algebraic notation for piece to move
