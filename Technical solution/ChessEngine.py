@@ -6,11 +6,15 @@ class Game():
 	def __init__(self,name):
 		self.name = name
 		self.board = []
-		
+
+	def getPieceAtLocation(self, file, column):
+		return self.board[file][column]
+	
 	#Classes
 	class Piece():		#A class that represents a chess piece with attributes such as piece type and piece location on the board
-		def __init__(self, pieceType, file, column):	#Constructor for the Piece class. Declares the:  
+		def __init__(self, pieceType, pieceColour, file, column):	#Constructor for the Piece class. Declares the:  
 			self.pieceType = pieceType              #type of piece (pawn, rook, etc)
+			self.pieceColour = pieceColour
 			self.file = file                        #file (row) in the board
 			self.column = column                 	#column in the board
 	
@@ -45,8 +49,16 @@ class Game():
 		def getPieceType(self): 	#'Getter' for the pieceType attribute, returns said attribute when called
 			return self.pieceType
 	
-	class 
-	
+	class Rook(Piece):
+		def __init__(self):
+			Super().__init__()
+		
+		def findPossibleMoveLocations(self):	#A function that returns all locations that a piece can move to
+			if self.colour == "white": i = -1
+			else: i = 1
+			while True:	#Down
+
+				if piece.
 	
 	
 	
