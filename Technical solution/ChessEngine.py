@@ -57,8 +57,8 @@ class Game():
 			if self.colour == "white": i = -1
 			else: i = 1
 			while True:	#Down
-
-				if piece.
+			///MUST FINISH///
+				
 	
 	
 	
