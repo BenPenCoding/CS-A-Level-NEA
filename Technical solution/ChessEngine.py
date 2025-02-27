@@ -49,6 +49,9 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 	def getPieceType(self): 	#'Getter' for the pieceType attribute, returns said attribute when called
 		return self.pieceType
 
+	def isPieceEmpty(self):
+		if self.pieceType 
+
 class Rook(Piece): 			#A class that represents the rook chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Rook class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
@@ -57,11 +60,11 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		file, column = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
 		fileIncrement, columnIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
-		tempFile, tempColumn = 0, 0		#Declares two variables that will be used to store the temporary file and column of possible locations to move to
+		tempFile, tempColumn = file, column	#Declares two variables that store the temporary file and column of possible locations to move to
 		
 		for i in range(4):	#The four cardinal directions
 			while True:	#A while loop so that all possible move locations in a row are found 
-
+				
 				'''Add recoding to fileIncrement and columnIncrement to change direction each iteration'''
 				
 				pieceToCheck = game.getPieceAtLocation(tempFile, tempColumn)	#Gets the piece object to check 
