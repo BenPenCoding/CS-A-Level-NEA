@@ -51,21 +51,24 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 
 class Rook(Piece): 			#A class that represents the rook chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Rook class
-		Super().__init__()	#
+		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
 	
 	def findPossibleMoveLocations(self):		#A function that returns all locations that a piece can move to
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		file, column = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
-		fileIncrement, columnIncrement = 0, 0
-		tempFile, tempColumn = 0,0
+		fileIncrement, columnIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
+		tempFile, tempColumn = 0, 0		#Declares two variables that will be used to store the temporary file and column of possible locations to move to
 		
 		for i in range(4):	#The four cardinal directions
-			pieceToCheck = game.getPieceAtLocation(file,column)
-			if pieceToCheck.getPieceType() == "Empty":
-				tempFile, tempColumn = pieceToCheck.getBoardCoords()
-				possibleMoveLocations.append([tempFile, tempColumn])
-			else:
-				break
+			while True:	#A while loop so that all possible move locations in a row are found 
+
+				'''Add recoding to fileIncrement and columnIncrement to change direction each iteration'''
+				
+				pieceToCheck = game.getPieceAtLocation(tempFile, tempColumn)	#Gets the piece object to check 
+				if pieceToCheck.getPieceType() == "Empty":			#Checks if the piece object is empty
+					possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
+				else:		#Otherwise the piece to check is not empty 
+					break	#Exits the while loop
 
 
 
