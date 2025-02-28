@@ -88,35 +88,35 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 						quit()		#DEBUG - Quits the program entirely
 
 				if (tempFile > 7 or tempFile < 0) or (tempColumn > 7 or tempColumn < 0):	#Checks if the file and column of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
-					break									
+					break									#If this is the case, exit the while loop and begin checking in 							
 				
 				pieceToCheck = game.getPieceAtLocation(tempFile, tempColumn)	#Gets the piece object to check 
 				
 				if pieceToCheck.getPieceType() == "Empty":			#Checks if the piece object is empty
 					possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
 				
-				elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":
+				elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location is not completely empty
 					possibleMoveLocations.append([tempFile, tempColumn])
 					break
 				
-				else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken), or it's  
+				else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
 					break	#Exits the while loop
 
 
 
 class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
-	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares the:
-		pieceTypeDict = {"Knight":"N",					#dictionary that the program uses to determine the algebraic notation of a piece type
+	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares:
+		pieceTypeDict = {"Knight":"N",					#the dictionary that the program uses to determine the algebraic notation of a piece type
 				"Queen": "Q",					#
 				"King": "K",					#
 				"Bishop": "B",					#
 				"Pawn":"",					#
 				"Empty":"",					#
 				"Rook":"R"}					#
-		self.startPiece = startPiece					#piece to move
-		self.endPiece = endPiece					#piece to replace with startPiece (could be a piece or an empty grid)
-		self.startPieceNotation = pieceTypeDict[self.startPiece]	#algebraic notation for piece to move
-		self.endPieceNotation = pieceTypeDict[self.endPiece]		#algebraic notation for piece to replace with startPiece
+		self.startPiece = startPiece					#the piece to move
+		self.endPiece = endPiece					#the piece to replace with startPiece (could be a piece or an empty grid)
+		self.startPieceNotation = pieceTypeDict[self.startPiece]	#the algebraic notation for piece to move
+		self.endPieceNotation = pieceTypeDict[self.endPiece]		#the algebraic notation for piece to replace with startPiece
 
 	#Getters
 	def getStartPiece(self):	#'Getter' for the startPiece attribute, returns said attribute when called
