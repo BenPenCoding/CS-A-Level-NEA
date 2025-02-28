@@ -1,15 +1,13 @@
 #Libraries
-import pygame as pg
-from time import *
+import pygame as pg	#Used for the GUI
+from time import *	#Used to pause the program allowing a tester to evaluate an error before the program stops
 
 #Classes
-class Game():
+class Game():	#A class that represents a chess game with attributes that will be saved if the user decided to continue a game at a later time, and also contains data about the board itself
+	def __init__(self,name):	#Constructor for the Game class. Declares the:
+		self.board = []		#array that will contain Piece objects 
 
-	def __init__(self,name):
-		self.name = name
-		self.board = []
-
-	def getPieceAtLocation(self, file, column):
+	def getPieceAtLocation(self, file, column):	#A function that returns the Piece object at a given file and column of the board
 		return self.board[file][column]
 
 class Piece():		#A class that represents a chess piece with attributes such as piece type and piece location on the board
@@ -31,8 +29,8 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 		self.column = column
 
 	def setBoardCoords(self, file, column):	     #Subroutine that abstracts the individual 'setter' subroutines for board position from the user for simplicity
-		setFile(file)
-		setColumn(column)
+		self.setFile(file)
+		self.setColumn(column)
 		
 	def setPieceType(self, pieceType):	#'Setter' for the pieceType attribute, called when a piece is instantiated or a pawn reaches the other side of the board and can change into another piece
 		self.pieceType = pieceType
@@ -67,11 +65,13 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 	
 	def findPossibleMoveLocations(self):		#A function that returns all locations that a piece can move to
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
-		file, column = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
+		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
 		fileIncrement, columnIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
-		tempFile, tempColumn = file, column	#Declares two variables that store the temporary file and column of possible locations to move to
 		
 		for i in range(4):		#The four cardinal directions
+
+			tempFile, tempColumn = pieceFile, pieceColumn	#Initializes two variables that are set to the location of the piece to move
+			
 			while True:		#A while loop so that all possible move locations in a row are found 
 				match i:	#Python's equivalent of a switch/case statement
 					case 0:		#If the increment variable has a value of 0, test all possible move locations to the right of the piece
@@ -89,12 +89,16 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 
 				if (tempFile > 7 or tempFile < 0) or (tempColumn > 7 or tempColumn < 0):	#Checks if the file and column of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
 					break									#If this is the case, exit the while loop and begin checking in 							
+
+				tempFile += fileIncrement		#Increments the file of the next piece to search by the designated direction-dependent increment
+				tempColumn += columnIncrement		#Increments the column of the next piece to search by the designated direction-dependent increment
 				
 				pieceToCheck = game.getPieceAtLocation(tempFile, tempColumn)	#Gets the piece object to check 
 				
 				if pieceToCheck.getPieceType() == "Empty":			#Checks if the piece object is empty
 					possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
-				
+					continue
+					
 				elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location is not completely empty
 					possibleMoveLocations.append([tempFile, tempColumn])
 					break
@@ -102,7 +106,25 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 				else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
 					break	#Exits the while loop
 
+class Bishop(Piece):			#A class that represents the bishop chess piece, which inherits from the Piece class
+	def __init__(self):		#The constructor for the Bishop class
+		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
 
+class Knight(Piece):			#A class that represents the knight chess piece, which inherits from the Piece class
+	def __init__(self):		#The constructor for the Knight class
+		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
+
+class Queen(Piece):			#A class that represents the queen chess piece, which inherits from the Piece class
+	def __init__(self):		#The constructor for the Queen class
+		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
+
+class Pawn(Piece):			#A class that represents the pawn chess piece, which inherits from the Piece class
+	def __init__(self):		#The constructor for the Pawn class
+		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
+
+class King(Piece):			#A class that represents the king chess piece, which inherits from the Piece class
+	def __init__(self):		#The constructor for the King class
+		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
 
 class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
 	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares:
@@ -132,3 +154,19 @@ class Move():	#A class that represents a chess move with attributes including th
 		return self.endPieceNotation
 
 game = Game()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
