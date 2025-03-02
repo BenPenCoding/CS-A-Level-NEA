@@ -88,7 +88,7 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 						quit()		#DEBUG - Quits the program entirely
 
 				if (tempFile > 7 or tempFile < 0) or (tempColumn > 7 or tempColumn < 0):	#Checks if the file and column of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
-					break									#If this is the case, exit the while loop and begin checking in 							
+					break									#If this is the case, exit the while loop and begin checking in another direction						
 
 				tempFile += fileIncrement		#Increments the file of the next piece to search by the designated direction-dependent increment
 				tempColumn += columnIncrement		#Increments the column of the next piece to search by the designated direction-dependent increment
@@ -109,6 +109,51 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 class Bishop(Piece):			#A class that represents the bishop chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Bishop class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
+
+	def findPossibleMoveLocations(self):
+		possibleMoveLocations = []		#Declaring the array to add possible move locations to
+		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
+
+		fileIncrement, columnIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to change direction.
+		
+		for i in range(4):		#The four diagonal directions
+
+			tempFile, tempColumn = pieceFile, pieceColumn	#Initializes two variables that are set to the location of the piece to move
+			
+			while True:		#A while loop so that all possible move locations in a diagonal line are found 
+				match i:	#Python's equivalent of a switch/case statement
+					case 0:		#If the increment variable has a value of 0, test all possible move locations to the up and right of the piece
+						fileIncrement, columnIncrement = -1, 1
+					case 1:		#If the increment variable has a value of 1, test all possible move locations up and left of the piece
+						fileIncrement, columnIncrement = -1, -1
+					case 2:		#If the increment variable has a value of 2, test all possible move locations to the down and left of the piece
+						fileIncrement, columnIncrement = 1, -1
+					case 3:		#If the increment variable has a value of 3, test all possible move locations down and right of the piece
+						fileIncrement, columnIncrement = 1, 1
+					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
+						print("Fatal error, Bishop class switch/case statement experienced a larger increment value than expected.")
+						sleep(5)	#DEBUG - Pauses the program for five seconds to allow the tester to interpret the error message 
+						quit()		#DEBUG - Quits the program entirely
+
+				if (tempFile > 7 or tempFile < 0) or (tempColumn > 7 or tempColumn < 0):	#Checks if the file and column of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
+					break									#If this is the case, exit the while loop and begin checking in another direction							
+
+				tempFile += fileIncrement		#Increments the file of the next piece to search by the designated direction-dependent increment
+				tempColumn += columnIncrement		#Increments the column of the next piece to search by the designated direction-dependent increment
+				
+				
+				pieceToCheck = game.getPieceAtLocation(tempFile, tempColumn)	#Gets the piece object to check 
+				
+				if pieceToCheck.getPieceType() == "Empty":			#Checks if the piece object is empty
+					possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
+					continue
+					
+				elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location is not completely empty
+					possibleMoveLocations.append([tempFile, tempColumn])
+					break
+				
+				else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
+					break	#Exits the while loop
 
 class Knight(Piece):			#A class that represents the knight chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Knight class
