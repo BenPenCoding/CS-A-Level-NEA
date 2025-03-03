@@ -59,6 +59,18 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 		if self.pieceType == "Empty":
 			return True
 
+	def isPieceOpenToTake(pieceToCheck):
+		if isPieceEmpty(pieceToCheck):		#Checks if the piece object is empty
+			return True, True		#First return True signals the piece can be moved to, the second shows that 
+		elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location is not completely empty
+			possibleMoveLocations.append([tempFile, tempColumn])
+					
+				
+				else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
+					
+
+		
+
 class Rook(Piece): 			#A class that represents the rook chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Rook class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
@@ -94,17 +106,10 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 				tempColumn += columnIncrement		#Increments the column of the next piece to search by the designated direction-dependent increment
 				
 				pieceToCheck = game.getPieceAtLocation(tempFile, tempColumn)	#Gets the piece object to check 
-				
-				if pieceToCheck.getPieceType() == "Empty":			#Checks if the piece object is empty
+
+				if isPieceOpenToTake(pieceToCheck):
 					possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
-					continue
-					
-				elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location is not completely empty
-					possibleMoveLocations.append([tempFile, tempColumn])
-					break
 				
-				else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
-					break	#Exits the while loop
 
 class Bishop(Piece):			#A class that represents the bishop chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Bishop class
@@ -158,6 +163,13 @@ class Bishop(Piece):			#A class that represents the bishop chess piece, which in
 class Knight(Piece):			#A class that represents the knight chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Knight class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
+
+	def findPossibleMoveLocations(self):
+		possibleMoveLocations = []		#Declaring the array to add possible move locations to
+		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
+
+		
+
 
 class Queen(Piece):			#A class that represents the queen chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Queen class
