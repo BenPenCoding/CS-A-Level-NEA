@@ -182,15 +182,15 @@ class Knight(Piece):			#A class that represents the knight chess piece, which in
 			pieceToCheck = 	game.getPieceAtLocation(tempFile, tempColumn)
 
 			if self.isPieceEmpty(pieceToCheck) == "Empty":			#Checks if the piece object is empty
-					possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
-					continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
+				possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
+				continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
 					
-				elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location contains an oppositely coloured piece which can be taken (all except the king)
-					possibleMoveLocations.append([tempFile, tempColumn])		#Adds the location to the list of possible move locations
-					continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
+			elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location contains an oppositely coloured piece which can be taken (all except the king)
+				possibleMoveLocations.append([tempFile, tempColumn])		#Adds the location to the list of possible move locations
+				continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
 				
-				else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
-					pass	#Nothing happens here, the program returns to the for loop		
+			else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
+				pass	#Nothing happens here, the program returns to the for loop		
 		
 		return possibleMoveLocations	#Returns the list of possible move locations to wherever the function was called 
 		
@@ -299,7 +299,33 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 
 	def getPossibleMoveLocations(self):
 
-		return possibleMoveLocations
+		possibleMoveLocations = []		#Declaring the array to add possible move locations to
+		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
+		possibleIncrementList = [[-1, -1],[-1, 0],[-1, 1], [0,-1],[0, 1],[1, -1],[1, 0],[1, 1]]	This list contains the increments that must be added to a king's current location to check the squares it could possibly move to
+		
+		for coordinates in possibleIncrementList:
+
+			tempFile, tempColumn = pieceFile +coordinates[0], pieceColumn + coordinates[1]	#Declaring and initializing two variables that store the location of the piece to check, they're instantiated as the current increment values added to the knight's position 
+
+			if (tempFile < 0 or tempFile > 7) or (tempColumn < 0 or tempColumn > 7):
+				continue
+				
+			pieceToCheck = 	game.getPieceAtLocation(tempFile, tempColumn)
+
+			if self.isPieceEmpty(pieceToCheck) == "Empty":			#Checks if the piece object is empty
+				possibleMoveLocations.append([tempFile, tempColumn]) 	#If it is, add the location to the list of possible move locations
+				continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
+					
+			elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location contains an oppositely coloured piece which can be taken (all except the king)
+				possibleMoveLocations.append([tempFile, tempColumn])		#Adds the location to the list of possible move locations
+				continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
+				
+			else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
+				pass	#Nothing happens here, the program returns to the for loop		
+		
+		return possibleMoveLocations	#Returns the list of possible move locations to wherever the function was called 
+		
+		
 
 	def isPieceInCheck:
 		pieceFile, pieceColumn = self.getBoardCoords()
