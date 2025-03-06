@@ -1,6 +1,6 @@
 #Libraries
 import pygame as pg	#Used for the GUI
-from time import *	#Used to pause the program allowing a tester to evaluate an error before the program stops
+from time import *	#Used to pause the program 
 
 #Classes
 class Game():	#A class that represents a chess game with attributes that will be saved if the user decided to continue a game at a later time, and also contains data about the board itself
