@@ -18,7 +18,7 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 		self.column = column                 	#column in the board
 
 	#Functions
-	def findPossibleMoveLocations(self):	#An empty function that will be overridden in the piece subclasses, returns all locations that a piece can move to
+	def getPossibleMoveLocations(self):	#An empty function that will be overridden in the piece subclasses, returns all locations that a piece can move to
 		None
 	
 	#Setters
@@ -59,12 +59,14 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 		if self.pieceType == "Empty":
 			return True
 
-
+	def isPieceInCheck(self):	#An empty function that will be overridden in the King subclass
+		None
+		
 class Rook(Piece): 			#A class that represents the rook chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Rook class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
 	
-	def findPossibleMoveLocations(self):		#A function that returns all locations that a piece can move to
+	def getPossibleMoveLocations(self):		#A function that returns all locations that a piece can move to
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
 		fileIncrement, columnIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
@@ -114,7 +116,7 @@ class Bishop(Piece):			#A class that represents the bishop chess piece, which in
 	def __init__(self):		#The constructor for the Bishop class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
 
-	def findPossibleMoveLocations(self):
+	def getPossibleMoveLocations(self):
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
 
@@ -165,7 +167,7 @@ class Knight(Piece):			#A class that represents the knight chess piece, which in
 	def __init__(self):		#The constructor for the Knight class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
 
-	def findPossibleMoveLocations(self):
+	def getPossibleMoveLocations(self):
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
 		possibleIncrementList = [[-2, 1], [-2, -1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2]]	#Although not obvious, this list contains the increments that must be added to a knight's current location to check the squares it could possibly move to
@@ -198,7 +200,7 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 	def __init__(self):		#The constructor for the Queen class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
 
-	def findPossibleMoveLocations(self):
+	def getPossibleMoveLocations(self):
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
 		fileIncrement, columnIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
@@ -294,6 +296,21 @@ class Pawn(Piece):			#A class that represents the pawn chess piece, which inheri
 class King(Piece):			#A class that represents the king chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the King class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
+
+	def getPossibleMoveLocations(self):
+
+		return possibleMoveLocations
+
+	def isPieceInCheck:
+		pieceFile, pieceColumn = self.getBoardCoords()
+		for file in range(8):
+			for column in range(8):
+				pieceToCheck = game.getPieceAtLocation(file, column)
+				if (pieceToCheck.getPieceType != "Empty") and (pieceToCheck.getPieceColour != self.getPieceColour):
+					possibleMoveLocations = pieceToCheck.getPossibleMoveLocations
+					if [pieceFile, pieceColumn] in possibleMoveLocations:
+						return True
+		return False
 
 class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
 	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares:
