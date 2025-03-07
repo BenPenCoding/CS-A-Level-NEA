@@ -69,6 +69,7 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 	def getPossibleMoveLocations(self):		#A function that returns all locations that a piece can move to
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
+		
 		fileIncrement, columnIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
 		
 		for i in range(4):		#The four cardinal directions
