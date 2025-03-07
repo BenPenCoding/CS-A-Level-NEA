@@ -177,7 +177,7 @@ class Knight(Piece):			#A class that represents the knight chess piece, which in
 
 			tempFile, tempColumn = pieceFile +coordinates[0], pieceColumn + coordinates[1]	#Declaring and initializing two variables that store the location of the piece to check, they're instantiated as the current increment values added to the knight's position 
 
-			if (tempFile < 0 or tempFile > 7) or (tempColumn < 0 or tempColumn > 7):
+			if (tempFile < 0 or tempFile > 7) or (tempColumn < 0 or tempColumn > 7): 	#Checks if the file and column of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur
 				continue
 				
 			pieceToCheck = 	game.getPieceAtLocation(tempFile, tempColumn)
@@ -308,7 +308,7 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 
 			tempFile, tempColumn = pieceFile +coordinates[0], pieceColumn + coordinates[1]	#Declaring and initializing two variables that store the location of the piece to check, they're instantiated as the current increment values added to the knight's position 
 
-			if (tempFile < 0 or tempFile > 7) or (tempColumn < 0 or tempColumn > 7):
+			if (tempFile < 0 or tempFile > 7) or (tempColumn < 0 or tempColumn > 7):	#Checks if the file and column of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur
 				continue
 				
 			pieceToCheck = 	game.getPieceAtLocation(tempFile, tempColumn)
@@ -328,16 +328,16 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 		
 		
 
-	def isPieceInCheck:
-		pieceFile, pieceColumn = self.getBoardCoords()
-		for file in range(8):
-			for column in range(8):
-				pieceToCheck = game.getPieceAtLocation(file, column)
-				if (pieceToCheck.getPieceType != "Empty") and (pieceToCheck.getPieceColour != self.getPieceColour):
-					possibleMoveLocations = pieceToCheck.getPossibleMoveLocations
-					if [pieceFile, pieceColumn] in possibleMoveLocations:
-						return True
-		return False
+	def isPieceInCheck:	#Function to check if the King object is in check
+		pieceFile, pieceColumn = self.getBoardCoords()		#Initializes two variables which will be used to store the file and column of the King piece
+		for file in range(8):					#8 being the number of files in the board
+			for column in range(8):				#8 being the number of columns in the board
+				pieceToCheck = game.getPieceAtLocation(file, column)	#Initializes a variable as a Piece object from the board at the given file and column
+				if (pieceToCheck.getPieceType != "Empty") and (pieceToCheck.getPieceColour != self.getPieceColour):	#If the piece to check is not empty and has a different colour to the King piece:
+					possibleMoveLocations = pieceToCheck.getPossibleMoveLocations()					#Then get all possible moves of said piece
+					if [pieceFile, pieceColumn] in possibleMoveLocations:						#If the King piece's file and column are present in the list of the other piece's possible moves:
+						return True										#Then return true, the King piece is in check
+		return False	#If the program reaches here then the King piece is not in check and so return false
 
 class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
 	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares:
