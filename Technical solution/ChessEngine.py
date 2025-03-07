@@ -14,6 +14,7 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 	def __init__(self, pieceType, pieceColour, file, column):	#Constructor for the Piece class. Declares the:  
 		self.pieceType = pieceType              #type of piece (pawn, rook, etc)
 		self.pieceColour = pieceColour
+		self.timesMoved = 0
 		self.file = file                        #file (row) in the board
 		self.column = column                 	#column in the board
 
@@ -37,6 +38,9 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 
 	def setPieceColour(Self, pieceColour):	#'Setter' for the pieceColour attribute, called when a piece is instantiated 
 		self.pieceColour = pieceColour
+
+	def increaseTimesMoved(self):
+		self.timesMoved += 1
 	
 	#Getters
 	def getFile(self):	#'Getter' for the file attribute, returns said attribute when called
@@ -54,6 +58,9 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 	def getPieceColour(self):	#'Getter' for the pieceColour attribute, returns said attribute when called
 		return self.pieceType
 
+	def getTimesMoved(self):
+		return self.timesMoved
+	
 	#Checkers
 	def isPieceEmpty(self):		#'Checker' which returns the bool True if the value of the attribute pieceType is "Empty", meaning that the location that piece takes up is free for another piece to move to
 		if self.pieceType == "Empty":
@@ -293,6 +300,33 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 class Pawn(Piece):			#A class that represents the pawn chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the Pawn class
 		Super().__init__()	#Calls the super constructor from the parent class (Piece class)
+
+	def getPossibleMoveLocations(self):
+		possibleMoveLocations = []		#Declaring the array to add possible move locations to
+		pieceFile, pieceColumn = self.getBoardCoords()	#Gets the file and column of the piece to move by using the getBoardCoords function 
+
+		if piece.colour = "white":	#This if statement initializes an inrement variable, i, which will alter the direction of the pawns movement depending on its colour
+			i = i
+		else:
+			i= -1
+		
+		tempFile, tempColumn = -1 * i, 0
+
+		if (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() == "Empty":
+			possibleMoveLocations.append([tempFile, tempColumn])
+
+		tempFile, tempColumn = -1 * i, 1
+
+		if (game.getPieceAtLocation(tempFile, tempColumn).getColour() != self.getColour()) and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "King"):
+			possibleMoveLocations.append([tempFile, tempColumn])
+			
+		tempFile, tempColumn = -1 * i, -1
+
+		if (game.getPieceAtLocation(tempFile, tempColumn).getColour() != self.getColour()) and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "King"):
+			possibleMoveLocations.append([tempFile, tempColumn])
+			
+		#ADD EN PASSANT CASE
+
 
 class King(Piece):			#A class that represents the king chess piece, which inherits from the Piece class
 	def __init__(self):		#The constructor for the King class
