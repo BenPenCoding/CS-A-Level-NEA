@@ -6,10 +6,16 @@ from time import *	#Used to pause the program
 class Game():	#A class that represents a chess game with attributes that will be saved if the user decided to continue a game at a later time, and also contains data about the board itself
 	def __init__(self,name):	#Constructor for the Game class. Declares the:
 		self.board = []		#array that will contain Piece objects 
-
+		self.blackPieces = []
+		self.whitePieces = []
 	def getPieceAtLocation(self, file, column):	#A function that returns the Piece object at a given file and column of the board
 		return self.board[file][column]
-
+		
+	def getPieces(self, colour):
+		if colour == "Black":
+			return self.blackPieces 
+		else: return self.whitePieces
+	
 class Piece():		#A class that represents a chess piece with attributes such as piece type and piece location on the board
 	def __init__(self, pieceType, pieceColour, file, column):	#Constructor for the Piece class. Declares the:  
 		self.pieceType = pieceType              #type of piece (pawn, rook, etc)
@@ -364,13 +370,11 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 
 	def isPieceInCheck:	#Function to check if the King object is in check
 		pieceFile, pieceColumn = self.getBoardCoords()		#Initializes two variables which will be used to store the file and column of the King piece
-		for file in range(8):					#8 being the number of files in the board
-			for column in range(8):				#8 being the number of columns in the board
-				pieceToCheck = game.getPieceAtLocation(file, column)	#Initializes a variable as a Piece object from the board at the given file and column
-				if (pieceToCheck.getPieceType != "Empty") and (pieceToCheck.getPieceColour != self.getPieceColour):	#If the piece to check is not empty and has a different colour to the King piece:
-					possibleMoveLocations = pieceToCheck.getPossibleMoveLocations()					#Then get all possible moves of said piece
-					if [pieceFile, pieceColumn] in possibleMoveLocations:						#If the King piece's file and column are present in the list of the other piece's possible moves:
-						return True										#Then return true, the King piece is in check
+		for i in game.getPieces(self.getPieceColour):
+			pieceToCheck = i
+			possibleMoveLocations = pieceToCheck.getPossibleMoveLocations()					#Then get all possible moves of said piece
+			if [pieceFile, pieceColumn] in possibleMoveLocations:						#If the King piece's file and column are present in the list of the other piece's possible moves:
+				return True										#Then return true, the King piece is in check
 		return False	#If the program reaches here then the King piece is not in check and so return false
 
 class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
