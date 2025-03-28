@@ -8,6 +8,7 @@ class Game():	#A class that represents a chess game with attributes that will be
 		self.board = []		#array that will contain Piece objects 
 		self.blackPieces = []
 		self.whitePieces = []
+		
 	def getPieceAtLocation(self, file, column):	#A function that returns the Piece object at a given file and column of the board
 		return self.board[file][column]
 		
@@ -370,12 +371,16 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 
 	def isPieceInCheck:	#Function to check if the King object is in check
 		pieceFile, pieceColumn = self.getBoardCoords()		#Initializes two variables which will be used to store the file and column of the King piece
-		for i in game.getPieces(self.getPieceColour):
+		colour = "Black" if self.getPieceColour == "White" else "Black"
+		for i in game.getPieces(colour):
 			pieceToCheck = i
 			possibleMoveLocations = pieceToCheck.getPossibleMoveLocations()					#Then get all possible moves of said piece
 			if [pieceFile, pieceColumn] in possibleMoveLocations:						#If the King piece's file and column are present in the list of the other piece's possible moves:
 				return True										#Then return true, the King piece is in check
 		return False	#If the program reaches here then the King piece is not in check and so return false
+
+	def isPieceInCheckmate:
+		#NEED SINGLE CHECKMATE AND DOUBLE CHECKMATE CASES
 
 class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
 	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares:
