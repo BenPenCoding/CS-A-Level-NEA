@@ -54,7 +54,43 @@ class Game():	#A class that represents a chess game with attributes that will be
 		
         def setPieceAtLocation(self, file, column, piece):
              self.board[file][column] = piece
-		
+        	
+        def Move(self, startFile, startColumn, endFile, endColumn):
+            
+            pieceTypeDict =   {"Knight":"N",				#The dictionary that the program uses to determine the algebraic notation of a piece type
+                                            "Queen": "Q",				#
+                                            "King": "K",					#
+                                            "Bishop": "B",				#
+                                            "Pawn":"",					#
+                                            "Empty":"",					#
+                                            "Rook":"R"}				#
+            
+            locationTypeDict =  {0: 'a',					#The dictionary that the program uses to determine the alphabetical representation of a coordinate
+                                                1: 'b',
+                                                2: 'c',
+                                                3: 'd',
+                                                4: 'e',
+                                                5: 'f',
+                                                6: 'g',
+                                                7: 'h'}
+                                
+            startPiece = self.getPieceAtLocation(startFile, startColumn)
+            endPiece = self.getPieceAtLocation(endFile, endColumn)
+            
+            self.setPieceAtLocation(startFile, startColumn, Piece("Empty",None, startFile, startColumn))	#Make the square that the piece is moving from empty
+            
+            if endPiece.getPieceColour() == "White":	#If taken piece colour is white, remove it from the list of white pieces
+                self.whitePieces.remove(endPiece)
+            else:
+                self.blackPieces.remove(endPiece)		#If taken piece colour is black, remove it from the list of black pieces
+            
+            self.setPieceAtLocation(endFile, endColumn, startPiece)		#Sets the taken square to the taking piece
+            
+            notation = pieceTypeDict[startPiece,getPieceType()] + pieceTypeDict[endPiece #START HERE
+            
+            self.numMoves += 1
+            
+            
 	#TESTING - REMOVE BEFORE SUBMISSION
         def displayBoard(self):
             for i in self.board:
@@ -434,6 +470,7 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 	#def isPieceInCheckmate(self):
 		#NEED SINGLE CHECKMATE AND DOUBLE CHECKMATE CASES
 
+'''
 class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
 	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares:
 		pieceTypeDict = {"Knight":"N",					#the dictionary that the program uses to determine the algebraic notation of a piece type
@@ -460,6 +497,7 @@ class Move():	#A class that represents a chess move with attributes including th
 
 	def getEndPieceNotation(self):		#'Getter' for the endPieceNotation attribute, returns said attribute when called
 		return self.endPieceNotation
+'''
 
 game = Game("Test")
 game.initializeBoard()
