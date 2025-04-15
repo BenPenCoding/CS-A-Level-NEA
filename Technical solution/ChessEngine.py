@@ -317,19 +317,19 @@ class Pawn(Piece):			#A class that represents the pawn chess piece, which inheri
 		else:
 			i= -1
 		
-		tempFile, tempColumn = -1 * i, 0
+		tempFile, tempColumn = pieceFile + (-1 * i), pieceColumn + 0
 
 		if (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() == "Empty":
 			possibleMoveLocations.append([tempFile, tempColumn])
 
-		tempFile, tempColumn = -1 * i, 1
-
-		if (game.getPieceAtLocation(tempFile, tempColumn).getColour() != self.getColour()) and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "King"):
+		tempFile, tempColumn = pieceFile + (-1 * i), pieceColumn + 1
+		
+		if (game.getPieceAtLocation(tempFile, tempColumn).getColour() != self.getColour()) and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "King") and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "Empty"):
 			possibleMoveLocations.append([tempFile, tempColumn])
-			
-		tempFile, tempColumn = -1 * i, -1
+		
+		tempFile, tempColumn = pieceFile + (-1 * i), pieceColumn + -1
 
-		if (game.getPieceAtLocation(tempFile, tempColumn).getColour() != self.getColour()) and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "King"):
+		if (game.getPieceAtLocation(tempFile, tempColumn).getColour() != self.getColour()) and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "King") and (game.getPieceAtLocation(tempFile, tempColumn).getPieceType() != "Empty"):
 			possibleMoveLocations.append([tempFile, tempColumn])
 			
 		#ADD EN PASSANT CASE
