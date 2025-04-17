@@ -55,41 +55,41 @@ class Game():	#A class that represents a chess game with attributes that will be
         def setPieceAtLocation(self, rank, column, piece):
              self.board[rank][column] = piece
 
-	def getNotation(startPiece, endPiece):
+        def getNotation(startPiece, endPiece):
 
-		pieceTypeDict = {	"Knight":"N",				#The dictionary that the program uses to determine the algebraic notation of a piece type
-                                	"Queen": "Q",				#
-                                 	"King": "K",				#
-                                 	"Bishop": "B",				#
-                                 	"Pawn":"",				#
-                                 	"Empty":"",				#
-                                 	"Rook":"R"}				#
-            
-            	locationTypeDict =  {0: 'a',					#The dictionary that the program uses to determine the alphabetical representation of a coordinate
-                                     1: 'b',
-				     2: 'c',
-                                     3: 'd',
-                        	     4: 'e',
-                                     5: 'f',
-                                     6: 'g',
-                                     7: 'h'}
+            pieceTypeDict = {	"Knight":"N",				#The dictionary that the program uses to determine the algebraic notation of a piece type
+            "Queen": "Q",				#
+            "King": "K",				#
+            "Bishop": "B",				#
+            "Pawn":"",				#
+            "Empty":"",				#
+            "Rook":"R"}				#
+
+            locationTypeDict =  {0: 'a',					#The dictionary that the program uses to determine the alphabetical representation of a coordinate
+            1: 'b',
+            2: 'c',
+            3: 'd',
+            4: 'e',
+            5: 'f',
+            6: 'g',
+            7: 'h'}
+
+            #Checks if the opposite king is in check following this move
+            check = ""			#With algebraic move notation, if the oppositions king is in check, a '+' is added to the end. Assuming it's not in check, check is set to nothing
+            colour = "White" if startPiece.getPieceColour() == "Black" else white
+            piecesToCheck = game.getPieces(colour)
+            for i in piecesToCheck:
+                if i.getPieceType() == "King" and i.isPieceInCheck():
+                    check = "+"	#If the oppositions king is in check, add a '+' to the end.
+
+            #Checks if the taken piece is empty
+            taking = ""		#With algebraic move notation, if the move takes another piece, an 'x' is added to the end. Assuming it's not, taking is set to nothing
+            if endPiece.getPieceType() != "Empty":		#If not moving to an empty square
+                taking = "x"				#Set taking to 'x'
+
+            return pieceTypeDict[startPiece] + taking + locationTypeDict[endPiece.getFile()] + str(8-endPiece.getRank()) + check
+
 		
-		#Checks if the opposite king is in check following this move
-		check = ""			#With algebraic move notation, if the oppositions king is in check, a '+' is added to the end. Assuming it's not in check, check is set to nothing
-		colour = "White" if startPiece.getPieceColour() == "Black" else white
-		piecesToCheck = game.getPieces(colour)
-		for i in piecesToCheck:
-			if i.getPieceType() == "King" and i.isPieceInCheck():
-				check = "+"	#If the oppositions king is in check, add a '+' to the end.
-
-		#Checks if the taken piece is empty
-		taking = ""		#With algebraic move notation, if the move takes another piece, an 'x' is added to the end. Assuming it's not, taking is set to nothing
-		if endPiece.getPieceType() != "Empty":		#If not moving to an empty square
-			taking = "x"				#Set taking to 'x'
-			
-		return pieceTypeDict[startPiece] + taking + locationTypeDict[endPiece.getFile()] + str(8-endPiece.getRank()) + check
-
-		else:
 				
 	
 	
@@ -108,8 +108,8 @@ class Game():	#A class that represents a chess game with attributes that will be
                 self.blackPieces.remove(endPiece)		#If taken piece colour is black, remove it from the list of black pieces
             
             self.setPieceAtLocation(endRank, endColumn, startPiece)		#Sets the taken square to the taking piece
-            
-            #notation = self.getNotation(startPiece, endPiece) 		#Returns the algebraic notation of the move 
+            startPiece.setBoardCoords(endRank, endColumn)
+            #notation = f" {self.numMoves}. {self.getNotation(startPiece, endPiece)}" 		#Returns the algebraic notation of the move 
             
             self.numMoves += 1
             
@@ -482,7 +482,7 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 
 	def isPieceInCheck(self):	#Function to check if the King object is in check
 		pieceRank, pieceColumn = self.getBoardCoords()		#Initializes two variables which will be used to store the rank and column of the King piece
-		colour = "Black" if self.getPieceColour == "White" else "White"
+		colour = "Black" if self.getPieceColour() == "White" else "White"
 		for i in game.getPieces(colour):
 			pieceToCheck = i
 			possibleMoveLocations = pieceToCheck.getPossibleMoveLocations()					#Then get all possible moves of said piece
@@ -493,36 +493,6 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 	#def isPieceInCheckmate(self):
 		#NEED SINGLE CHECKMATE AND DOUBLE CHECKMATE CASES
 
-'''
-class Move():	#A class that represents a chess move with attributes including the piece to move, and the piece for it to replace
-	def __init__(self, startPiece, endPiece):				#Constructor for the Move class, declares:
-		pieceTypeDict = {"Knight":"N",					#the dictionary that the program uses to determine the algebraic notation of a piece type
-				"Queen": "Q",					#
-				"King": "K",					#
-				"Bishop": "B",					#
-				"Pawn":"",						#
-				"Empty":"",					#
-				"Rook":"R"}					#
-		self.startPiece = startPiece					#the piece to move
-		self.endPiece = endPiece					#the piece to replace with startPiece (could be a piece or an empty grid)
-		self.startPieceNotation = pieceTypeDict[self.startPiece]	#the algebraic notation for piece to move
-		self.endPieceNotation = pieceTypeDict[self.endPiece]		#the algebraic notation for piece to replace with startPiece
-
-	#Getters
-	def getStartPiece(self):	#'Getter' for the startPiece attribute, returns said attribute when called
-		return self.startPiece
-
-	def getEndPiece(self):		#'Getter' for the endPiece attribute, returns said attribute when called
-		return self.endPiece
-
-	def getStartPieceNotation(self):	#'Getter' for the startPieceNotation attribute, returns said attribute when called
-		return self.startPieceNotation
-
-	def getEndPieceNotation(self):		#'Getter' for the endPieceNotation attribute, returns said attribute when called
-		return self.endPieceNotation
-'''
 
 game = Game("Test")
 game.initializeBoard()
-game.displayBoard()
-
