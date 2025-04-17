@@ -90,13 +90,8 @@ class Game():	#A class that represents a chess game with attributes that will be
             return pieceTypeDict[startPiece] + taking + locationTypeDict[endPiece.getFile()] + str(8-endPiece.getRank()) + check
 
 		
-				
-	
-	
         def Move(self, startRank, startColumn, endRank, endColumn):
-            
-            
-                                
+                             
             startPiece = self.getPieceAtLocation(startRank, startColumn)
             endPiece = self.getPieceAtLocation(endRank, endColumn)
             
@@ -112,16 +107,6 @@ class Game():	#A class that represents a chess game with attributes that will be
             #notation = f" {self.numMoves}. {self.getNotation(startPiece, endPiece)}" 		#Returns the algebraic notation of the move 
             
             self.numMoves += 1
-            
-            
-	#TESTING - REMOVE BEFORE SUBMISSION
-        def displayBoard(self):
-            for i in self.board:
-                array = []
-                for j in i:
-                    array.append(j.getPieceType())
-                print(array)
-	#TESTING - REMOVE BEFORE SUBMISSION
         
         def getPieces(self, colour):
             if colour == "Black":
@@ -492,7 +477,3 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 
 	#def isPieceInCheckmate(self):
 		#NEED SINGLE CHECKMATE AND DOUBLE CHECKMATE CASES
-
-
-game = Game("Test")
-game.initializeBoard()
