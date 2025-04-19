@@ -8,7 +8,7 @@ class Game():	#A class that represents a chess game with attributes that will be
             self.whitePieces = []
             self.name = name
             self.numMoves = 0
-            
+            self.turn = "White"
         def initializeBoard(self):
             
                 for i in range(8): #These nested for loops make every square on the board an empty square. Like a base template
@@ -105,7 +105,9 @@ class Game():	#A class that represents a chess game with attributes that will be
             self.setPieceAtLocation(endRank, endColumn, startPiece)		#Sets the taken square to the taking piece
             startPiece.setBoardCoords(endRank, endColumn)
             #notation = f" {self.numMoves}. {self.getNotation(startPiece, endPiece)}" 		#Returns the algebraic notation of the move 
-            
+
+	    self.turn = "White" if self.turn == "Black" else "Black"
+		
             self.numMoves += 1
         
         def getPieces(self, colour):
