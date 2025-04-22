@@ -1,4 +1,5 @@
 import pygame
+import os
 from ChessEngine import *
 
 pygame.init()
@@ -10,7 +11,8 @@ class DisplayPiece(pygame.sprite.Sprite):
     
     def __init__(self, top, left, piece):
         self.piece = piece
-        self.image = pygame.image.load(f"{piece.getPieceColour()}{piece.getPieceType()}.jpg").convert_alpha() if piece.getPieceType() != "Empty" else pygame.image.load("square.jpg").convert_alpha()
+        self.path = os.path.dirname(__file__)
+        self.image = pygame.image.load(os.path.join(self.path,f"Images/{piece.getPieceColour()}{piece.getPieceType()}.jpg")).convert_alpha() if piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path,"Images/square.jpg")).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.top, self.rect.left = top, left
         self.selected = False
@@ -26,11 +28,11 @@ class DisplayPiece(pygame.sprite.Sprite):
         return self.selected
     
     def highlight(self):
-        self.image = pygame.image.load(f"{self.piece.getPieceColour()}{self.piece.getPieceType()}H.jpg").convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load("squareH.jpg").convert_alpha()
+        self.image = pygame.image.load(os.path.join(self.path,f"Images/{self.piece.getPieceColour()}{self.piece.getPieceType()}H.jpg")).convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path, "Images/squareH.jpg")).convert_alpha()
         self.highlighted = True
         
     def unhighlight(self):
-        self.image = pygame.image.load(f"{self.piece.getPieceColour()}{self.piece.getPieceType()}.jpg").convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load("square.jpg").convert_alpha()
+        self.image = pygame.image.load(f"Images/{self.piece.getPieceColour()}{self.piece.getPieceType()}.jpg").convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path, "Images/square.jpg")).convert_alpha()
         self.highlighted = False
     
     def isHighlighted(self):
