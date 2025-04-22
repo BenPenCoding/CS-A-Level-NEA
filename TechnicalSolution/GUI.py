@@ -37,17 +37,6 @@ class DisplayPiece(pygame.sprite.Sprite):
     
     def isHighlighted(self):
         return self.highlighted
-        
-game = createGame("Test")
-
-displayPieceList = [[],[],[],[],[],[],[],[]]	
-
-for rowOfPieces in game.getBoard():
-    for piece in rowOfPieces:
-        top = piece.getRank() * 50
-        left = piece.getFile() * 50
-        displayPieceList[game.getBoard().index(rowOfPieces)].append(DisplayPiece(top, left, piece))
-
 
 def deselectAll(pieces):
     for row in pieces:
@@ -66,94 +55,106 @@ def returnSelected(pieces):
             if piece.isSelected():
                 return piece
     return None
+      
+game = createGame("Test")
 
-running = True
+displayPieceList = [[],[],[],[],[],[],[],[]]	
 
-while running:
-    
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONUP:
-            left, top = pygame.mouse.get_pos()
-            if left > 399 or top > 399:
-                pass
-            else:
-                clickedPiece = displayPieceList[int(top/50)][int(left/50)]	#Finds individual piece that is clicked on
-                
-                if returnSelected(displayPieceList) == None:				#If no other pieces are selected
+for rowOfPieces in game.getBoard():
+    for piece in rowOfPieces:
+        top = piece.getRank() * 50
+        left = piece.getFile() * 50
+        displayPieceList[game.getBoard().index(rowOfPieces)].append(DisplayPiece(top, left, piece))
+
+def beginOfflineMultiplayer():
+
+    running = True
+
+    while running:
+        
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONUP:
+                left, top = pygame.mouse.get_pos()
+                if left > 399 or top > 399:
+                    pass
+                else:
+                    clickedPiece = displayPieceList[int(top/50)][int(left/50)]	#Finds individual piece that is clicked on
                     
-                    if clickedPiece.piece.getPieceColour() != game.turn:			#If selected piece is not the colour of the current turn
-                        continue										#Skip it 
-                    
-                    clickedPiece.clicked()										#Select this piece
-                    if clickedPiece.piece.getPieceType() != "Empty":					#If piece is not empty
-                        possibleMoveLocations = clickedPiece.piece.getPossibleMoveLocations(game)	#Find possible move locations
+                    if returnSelected(displayPieceList) == None:				#If no other pieces are selected
                         
-                        if game.getKing(game.getTurn()).isPieceInCheck():	#If the same coloured king is in check we can only move pieces that would prevent this
-                            pieceRank, pieceFile = clickedPiece.piece.getBoardCoords()			#Saves a copy of the clicked piece's locationfor later reference
-                            for moveLocation in possibleMoveLocations:						#Repeats through all possible move locations
-                                takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
-                                #Fake move, where the piece is moved, the program checks if the king piece is in check, then highlights the move if not
-                                game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), Piece("Empty", None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
-                                game.setPieceAtLocation(moveLocation[0], moveLocation[1], clickedPiece.piece)																	
-                                clickedPiece.piece.setBoardCoords(moveLocation[0], moveLocation[1])
-                                
-                                if not game.getKing(game.getTurn()).isPieceInCheck():
+                        if clickedPiece.piece.getPieceColour() != game.turn:			#If selected piece is not the colour of the current turn
+                            continue										#Skip it 
+                        
+                        clickedPiece.clicked()										#Select this piece
+                        if clickedPiece.piece.getPieceType() != "Empty":					#If piece is not empty
+                            possibleMoveLocations = clickedPiece.piece.getPossibleMoveLocations(game)	#Find possible move locations
+                            
+                            if game.getKing(game.getTurn()).isPieceInCheck():	#If the same coloured king is in check we can only move pieces that would prevent this
+                                pieceRank, pieceFile = clickedPiece.piece.getBoardCoords()			#Saves a copy of the clicked piece's locationfor later reference
+                                for moveLocation in possibleMoveLocations:						#Repeats through all possible move locations
+                                    takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
+                                    #Fake move, where the piece is moved, the program checks if the king piece is in check, then highlights the move if not
+                                    game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), Piece("Empty", None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
+                                    game.setPieceAtLocation(moveLocation[0], moveLocation[1], clickedPiece.piece)																	
+                                    clickedPiece.piece.setBoardCoords(moveLocation[0], moveLocation[1])
+                                    
+                                    if not game.getKing(game.getTurn()).isPieceInCheck():
+                                        displayPieceList[moveLocation[0]][moveLocation[1]].highlight()
+                                        
+                                    #Resets the moved piece and its attributes, hence the name 'fake' move
+                                    game.setPieceAtLocation(pieceRank, pieceFile, clickedPiece.piece)
+                                    clickedPiece.piece.setBoardCoords(pieceRank, pieceFile)
+                                    game.setPieceAtLocation(moveLocation[0], moveLocation[1], takenPiece)
+                                    
+                            else:													#If the same coloured king is not in check we can highlight all possible moves
+                                for moveLocation in possibleMoveLocations:
                                     displayPieceList[moveLocation[0]][moveLocation[1]].highlight()
                                     
-                                #Resets the moved piece and its attributes, hence the name 'fake' move
-                                game.setPieceAtLocation(pieceRank, pieceFile, clickedPiece.piece)
-                                clickedPiece.piece.setBoardCoords(pieceRank, pieceFile)
-                                game.setPieceAtLocation(moveLocation[0], moveLocation[1], takenPiece)
-                                
-                        else:													#If the same coloured king is not in check we can highlight all possible moves
-                            for moveLocation in possibleMoveLocations:
-                                displayPieceList[moveLocation[0]][moveLocation[1]].highlight()
-                                
-                else:		#If a piece is already selected
-                    firstClickedPiece = returnSelected(displayPieceList)
-                    secondClickedPiece = clickedPiece
-                    
-                    if firstClickedPiece == secondClickedPiece or not secondClickedPiece.isHighlighted():
-                        deselectAll(displayPieceList)
-                        unhighlightAll(displayPieceList)
-                    
-                    else:
+                    else:		#If a piece is already selected
+                        firstClickedPiece = returnSelected(displayPieceList)
+                        secondClickedPiece = clickedPiece
                         
-                        firstRank = firstClickedPiece.piece.getRank()
-                        firstFile = firstClickedPiece.piece.getFile()
+                        if firstClickedPiece == secondClickedPiece or not secondClickedPiece.isHighlighted():
+                            deselectAll(displayPieceList)
+                            unhighlightAll(displayPieceList)
                         
-                        secondRank = secondClickedPiece.piece.getRank()
-                        secondFile = secondClickedPiece.piece.getFile()
- 
-                        game.move(firstClickedPiece.piece, secondClickedPiece.piece)
-                                               
-                        notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
-                        print(notation)
-                        
-                        displayPieceList[firstRank][firstFile] = DisplayPiece(firstRank*50, firstFile*50,  game.getPieceAtLocation(firstRank, firstFile))
-                        displayPieceList[secondRank][secondFile] = DisplayPiece(secondRank*50, secondFile*50,  game.getPieceAtLocation(secondRank, secondFile))
-                        
-                        
-                        deselectAll(displayPieceList)
-                        unhighlightAll(displayPieceList)
-                        
-                        oppositionColour = "White" if game.getTurn() == "Black" else "Black"
-                        if game.getKing(game.getTurn()).isPieceInCheckmate(game):
-                            print(f"{oppositionColour} wins the game by checkmate!")
-                            running = False
-                        
-                        
-        elif event.type == pygame.QUIT:
-            running = False
+                        else:
+                            
+                            firstRank = firstClickedPiece.piece.getRank()
+                            firstFile = firstClickedPiece.piece.getFile()
+                            
+                            secondRank = secondClickedPiece.piece.getRank()
+                            secondFile = secondClickedPiece.piece.getFile()
     
-    screen.fill((255, 255, 255))
-    for rowOfPieces in displayPieceList:
-        for piece in rowOfPieces:
-            screen.blit(piece.image,piece.rect)
-            
-    pygame.display.update()
-    
-pygame.quit()  
+                            game.move(firstClickedPiece.piece, secondClickedPiece.piece)
+                                                
+                            notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
+                            print(notation)
+                            
+                            displayPieceList[firstRank][firstFile] = DisplayPiece(firstRank*50, firstFile*50,  game.getPieceAtLocation(firstRank, firstFile))
+                            displayPieceList[secondRank][secondFile] = DisplayPiece(secondRank*50, secondFile*50,  game.getPieceAtLocation(secondRank, secondFile))
+                            
+                            
+                            deselectAll(displayPieceList)
+                            unhighlightAll(displayPieceList)
+                            
+                            oppositionColour = "White" if game.getTurn() == "Black" else "Black"
+                            if game.getKing(game.getTurn()).isPieceInCheckmate(game):
+                                print(f"{oppositionColour} wins the game by checkmate!")
+                                running = False
+                            
+                            
+            elif event.type == pygame.QUIT:
+                running = False
+        
+        screen.fill((255, 255, 255))
+        for rowOfPieces in displayPieceList:
+            for piece in rowOfPieces:
+                screen.blit(piece.image,piece.rect)
+                
+        pygame.display.update()
+        
+    pygame.quit()  
 
 
 
