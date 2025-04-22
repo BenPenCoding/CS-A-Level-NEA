@@ -86,8 +86,6 @@ while running:
                     if clickedPiece.piece.getPieceType() != "Empty":					#If piece is not empty
                         possibleMoveLocations = clickedPiece.piece.getPossibleMoveLocations(game)	#Find possible move locations
                         
-                        print(game.getKing(game.getTurn()).isPieceInCheck())
-                        game.displayBoard()
                         if game.getKing(game.getTurn()).isPieceInCheck():	#If the same coloured king is in check we can only move pieces that would prevent this
                             pieceRank, pieceFile = clickedPiece.piece.getBoardCoords()			#Saves a copy of the clicked piece's locationfor later reference
                             for moveLocation in possibleMoveLocations:						#Repeats through all possible move locations
@@ -99,7 +97,7 @@ while running:
                                 
                                 if not game.getKing(game.getTurn()).isPieceInCheck():
                                     displayPieceList[moveLocation[0]][moveLocation[1]].highlight()
-                                
+                                    
                                 #Resets the moved piece and its attributes, hence the name 'fake' move
                                 game.setPieceAtLocation(pieceRank, pieceFile, clickedPiece.piece)
                                 clickedPiece.piece.setBoardCoords(pieceRank, pieceFile)
@@ -124,14 +122,16 @@ while running:
                         
                         secondRank = secondClickedPiece.piece.getRank()
                         secondFile = secondClickedPiece.piece.getFile()
-                        
+ 
+                        game.move(firstClickedPiece.piece, secondClickedPiece.piece)
+                                               
                         notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
                         print(notation)
                         
-                        game.move(firstClickedPiece.piece, secondClickedPiece.piece)
                         displayPieceList[firstRank][firstFile] = DisplayPiece(firstRank*50, firstFile*50,  game.getPieceAtLocation(firstRank, firstFile))
                         displayPieceList[secondRank][secondFile] = DisplayPiece(secondRank*50, secondFile*50,  game.getPieceAtLocation(secondRank, secondFile))
-                                           
+                        
+                        
                         deselectAll(displayPieceList)
                         unhighlightAll(displayPieceList)
                         
@@ -140,8 +140,6 @@ while running:
                             print(f"{oppositionColour} wins the game by checkmate!")
                             running = False
                         
-                        game.displayBoard()
-                        print("")
                         
         elif event.type == pygame.QUIT:
             running = False
@@ -154,5 +152,6 @@ while running:
     pygame.display.update()
     
 pygame.quit()  
+
 
 
