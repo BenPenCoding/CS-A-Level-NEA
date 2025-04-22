@@ -561,17 +561,3 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
             
             else:
                 return False
-'''          
-game = Game("Test")
-game.initializeBoard()
-game.move(game.getPieceAtLocation(6,4), game.getPieceAtLocation(4,4))
-game.move(game.getPieceAtLocation(1,3), game.getPieceAtLocation(3,3))
-game.move(game.getPieceAtLocation(4,4), game.getPieceAtLocation(3,3))
-game.move(game.getPieceAtLocation(1,2), game.getPieceAtLocation(2,2))
-game.move(game.getPieceAtLocation(3,3), game.getPieceAtLocation(2,2))
-game.move(game.getPieceAtLocation(0,3), game.getPieceAtLocation(2,3))
-game.move(game.getPieceAtLocation(2,3), game.getPieceAtLocation(2,4))
-
-print(game.getKing("White").isPieceInCheckmate(game))
-game.displayBoard()
-'''
