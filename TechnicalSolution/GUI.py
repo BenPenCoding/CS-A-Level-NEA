@@ -32,7 +32,7 @@ class DisplayPiece(pygame.sprite.Sprite):
         self.highlighted = True
         
     def unhighlight(self):
-        self.image = pygame.image.load(f"Images/{self.piece.getPieceColour()}{self.piece.getPieceType()}.jpg").convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path, "Images/square.jpg")).convert_alpha()
+        self.image = pygame.image.load(os.path.join(self.path, f"Images/{self.piece.getPieceColour()}{self.piece.getPieceType()}.jpg")).convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path, "Images/square.jpg")).convert_alpha()
         self.highlighted = False
     
     def isHighlighted(self):
@@ -158,3 +158,4 @@ def beginOfflineMultiplayer():
 
 
 
+beginOfflineMultiplayer()
