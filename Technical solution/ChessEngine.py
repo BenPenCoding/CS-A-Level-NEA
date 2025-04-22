@@ -15,7 +15,7 @@ class Game():	#A class that represents a chess game with attributes that will be
             self.blackPieces = []
             self.whitePieces = []
             self.name = name
-            self.numMoves = 1
+            self.numMoves = 0
             self.turn = "White"
             
         def initializeBoard(self):
@@ -468,22 +468,22 @@ class Pawn(Piece):			#A class that represents the pawn chess piece, which inheri
             if  not (tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0):        
                 if game.getPieceAtLocation(tempRank, tempFile).getPieceType() == "Empty":
                     possibleMoveLocations.append([tempRank, tempFile])
-
+                    
             tempRank, tempFile = pieceRank + (-1 * i), pieceFile + 1
             if  not (tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0):      
                 if (game.getPieceAtLocation(tempRank, tempFile).getPieceColour() != self.getPieceColour()) and (game.getPieceAtLocation(tempRank, tempFile).getPieceType() != "Empty"):
                     possibleMoveLocations.append([tempRank, tempFile])
             
-            tempRank, tempFile = pieceRank + (-1 * i), pieceFile + -1
+            tempRank, tempFile = pieceRank + (-1 * i), pieceFile - 1
             if  not (tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0):      
                 if (game.getPieceAtLocation(tempRank, tempFile).getPieceColour() != self.getPieceColour())  and (game.getPieceAtLocation(tempRank, tempFile).getPieceType() != "Empty"):
                     possibleMoveLocations.append([tempRank, tempFile])
-            
+                    
             if self.timesMoved == 0:
                 tempRank, tempFile = pieceRank + (-2 * i), pieceFile + 0
-            if  not (tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0):        
-                if game.getPieceAtLocation(tempRank, tempFile).getPieceType() == "Empty":
-                    possibleMoveLocations.append([tempRank, tempFile])
+                if  not (tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0):        
+                    if game.getPieceAtLocation(tempRank, tempFile).getPieceType() == "Empty":
+                        possibleMoveLocations.append([tempRank, tempFile])
             
             #ADD EN PASSANT CASE
             return possibleMoveLocations	#Returns the list of possible move locations to wherever the function was called 
@@ -561,3 +561,5 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
             
             else:
                 return False
+
+
