@@ -72,8 +72,8 @@ class Game():	#A class that represents a chess game with attributes that will be
 		
 		def setPieceAtLocation(self, rank, file, piece):
 			self.board[rank][file] = piece
-		
-		def getScore(self, colour):
+
+		def getColourScore(self, colour):
 			
 			pieceScoreDict={"King": 900,
 							"Queen": 90,
@@ -90,6 +90,18 @@ class Game():	#A class that represents a chess game with attributes that will be
 				score += pieceScoreDict[piece.getPieceType()]
 
 			return score
+
+		def getBestMove(self, colour):
+
+			pieceScoreDict={"King": 900,
+							"Queen": 90,
+							"Rook": 50,
+							"Bishop": 30,
+							"Knight": 30,
+							"Pawn": 10}
+
+			
+
 
 		def getTurn(self):
 			return self.turn
