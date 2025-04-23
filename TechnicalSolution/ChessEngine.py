@@ -1,5 +1,5 @@
 #Libraries
-
+from random import *
 #Functions
 def createGame(name):
 	global game
@@ -91,16 +91,115 @@ class Game():	#A class that represents a chess game with attributes that will be
 
 			return score
 
-		def getBestMove(self, colour):
+		def evaluateBoard(self, colour):
+			oppositeColour = "White" if colour == "Black" else "Black"
+			return self.getColourScore(colour) - self.getColourScore(oppositeColour)
 
-			pieceScoreDict={"King": 900,
-							"Queen": 90,
-							"Rook": 50,
-							"Bishop": 30,
-							"Knight": 30,
-							"Pawn": 10}
+		def getBestMove(self, depth, playerMove, colour):
 
-			
+			if depth == 0:
+				return self.evaluateBoard(colour)
+
+			moves = []
+
+			for piece in self.getPieces(colour):
+				for moveLocation in piece.getPossibleMoveLocations(game):
+					moves.append([piece, moveLocation])
+
+			bestMove = choice(moves)
+
+			if playerMove == colour:         #MAX
+				maxScore = -9999
+				for move in moves:
+
+					piece = move[0]
+					
+					pieceRank, pieceFile = piece.getBoardCoords()
+
+					takenPiece = self.getPieceAtLocation(move[1][0], move[1][1])
+
+					takenPieceRank, takenPieceFile = takenPiece.getBoardCoords()
+
+					self.setPieceAtLocation(piece.getRank(), piece.getFile(), Piece("Empty", None, piece.getRank(), piece.getFile()))
+					self.setPieceAtLocation(move[1][0], move[1][1], piece)
+					piece.setBoardCoords(move[1][0], move[1][1])
+					if colour == "White": 
+						self.whitePieces.remove(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.blackPieces.remove(takenPiece)
+					else: 
+						self.blackPieces.remove(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.whitePieces.remove(takenPiece)
+
+					oppositeColour = "White" if colour == "Black" else "Black"
+
+					currentScore = self.getBestMove(depth-1, playerMove, oppositeColour)
+
+					self.setPieceAtLocation(pieceRank, pieceFile, piece)
+					self.setPieceAtLocation(move[1][0], move[1][1], takenPiece)
+					piece.setBoardCoords(pieceRank, pieceFile)
+					if colour == "White": 
+						self.whitePieces.append(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.blackPieces.append(takenPiece)
+					else: 
+						self.blackPieces.append(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.whitePieces.append(takenPiece)
+
+					if currentScore > maxScore:
+						maxScore = max(currentScore, maxScore)
+						bestMove = move
+
+				return bestMove, maxScore
+
+			else:
+				minScore = 9999
+				for move in moves:
+					
+					piece = move[0]
+					
+					pieceRank, pieceFile = piece.getBoardCoords()
+
+					takenPiece = self.getPieceAtLocation(move[1][0], move[1][1])
+
+					takenPieceRank, takenPieceFile = takenPiece.getBoardCoords()
+
+					self.setPieceAtLocation(piece.getRank(), piece.getFile(), Piece("Empty", None, piece.getRank(), piece.getFile()))
+					self.setPieceAtLocation(move[1][0], move[1][1], piece)
+					piece.setBoardCoords(move[1][0], move[1][1])
+					if colour == "White": 
+						self.whitePieces.remove(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.blackPieces.remove(takenPiece)
+					else: 
+						self.blackPieces.remove(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.whitePieces.remove(takenPiece)
+					
+					oppositeColour = "White" if colour == "Black" else "Black"
+
+					currentScore = self.getBestMove(depth-1, playerMove, oppositeColour)
+
+					self.setPieceAtLocation(pieceRank, pieceFile, piece)
+					self.setPieceAtLocation(move[1][0], move[1][1], takenPiece)
+					piece.setBoardCoords(pieceRank, pieceFile)
+					if colour == "White": 
+						self.whitePieces.append(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.blackPieces.append(takenPiece)
+					else: 
+						self.blackPieces.append(piece)
+						if takenPiece.getPieceType() != "Empty":
+							self.whitePieces.append(takenPiece)
+
+					if currentScore < minScore:
+							minScore = min(currentScore, minScore)
+							bestMove = move
+
+				return bestMove, minScore
+
 
 
 		def getTurn(self):
