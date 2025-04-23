@@ -98,7 +98,7 @@ class Game():	#A class that represents a chess game with attributes that will be
 		def getBestMove(self, depth, playerMove, colour):
 
 			if depth == 0:
-				return self.evaluateBoard(colour)
+				return None, self.evaluateBoard(colour)
 
 			moves = []
 
@@ -124,37 +124,33 @@ class Game():	#A class that represents a chess game with attributes that will be
 					self.setPieceAtLocation(move[1][0], move[1][1], piece)
 					piece.setBoardCoords(move[1][0], move[1][1])
 					if colour == "White": 
-						self.whitePieces.remove(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.blackPieces.remove(takenPiece)
 					else: 
-						self.blackPieces.remove(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.whitePieces.remove(takenPiece)
 
 					oppositeColour = "White" if colour == "Black" else "Black"
 
-					currentScore = self.getBestMove(depth-1, playerMove, oppositeColour)
-
+					currentScore = self.getBestMove(depth-1, playerMove, oppositeColour)[1]
+												
 					self.setPieceAtLocation(pieceRank, pieceFile, piece)
 					self.setPieceAtLocation(move[1][0], move[1][1], takenPiece)
 					piece.setBoardCoords(pieceRank, pieceFile)
 					if colour == "White": 
-						self.whitePieces.append(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.blackPieces.append(takenPiece)
 					else: 
-						self.blackPieces.append(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.whitePieces.append(takenPiece)
-
+											
 					if currentScore > maxScore:
 						maxScore = max(currentScore, maxScore)
 						bestMove = move
 
 				return bestMove, maxScore
 
-			else:
+			else:			#MIN
 				minScore = 9999
 				for move in moves:
 					
@@ -170,27 +166,23 @@ class Game():	#A class that represents a chess game with attributes that will be
 					self.setPieceAtLocation(move[1][0], move[1][1], piece)
 					piece.setBoardCoords(move[1][0], move[1][1])
 					if colour == "White": 
-						self.whitePieces.remove(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.blackPieces.remove(takenPiece)
 					else: 
-						self.blackPieces.remove(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.whitePieces.remove(takenPiece)
 					
 					oppositeColour = "White" if colour == "Black" else "Black"
-
-					currentScore = self.getBestMove(depth-1, playerMove, oppositeColour)
+											
+					currentScore = self.getBestMove(depth-1, playerMove, oppositeColour)[1]
 
 					self.setPieceAtLocation(pieceRank, pieceFile, piece)
 					self.setPieceAtLocation(move[1][0], move[1][1], takenPiece)
 					piece.setBoardCoords(pieceRank, pieceFile)
 					if colour == "White": 
-						self.whitePieces.append(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.blackPieces.append(takenPiece)
 					else: 
-						self.blackPieces.append(piece)
 						if takenPiece.getPieceType() != "Empty":
 							self.whitePieces.append(takenPiece)
 
@@ -199,8 +191,6 @@ class Game():	#A class that represents a chess game with attributes that will be
 							bestMove = move
 
 				return bestMove, minScore
-
-
 
 		def getTurn(self):
 			return self.turn
