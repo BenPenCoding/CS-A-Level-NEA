@@ -72,7 +72,37 @@ class Game():	#A class that represents a chess game with attributes that will be
 		
 		def setPieceAtLocation(self, rank, file, piece):
 			self.board[rank][file] = piece
-		
+
+		def getColourScore(self, colour):
+			
+			pieceScoreDict={"King": 900,
+							"Queen": 90,
+							"Rook": 50,
+							"Bishop": 30,
+							"Knight": 30,
+							"Pawn": 10}
+
+			score = 0
+
+			pieces = self.getPieces(colour)
+
+			for piece in pieces:
+				score += pieceScoreDict[piece.getPieceType()]
+
+			return score
+
+		def getBestMove(self, colour):
+
+			pieceScoreDict={"King": 900,
+							"Queen": 90,
+							"Rook": 50,
+							"Bishop": 30,
+							"Knight": 30,
+							"Pawn": 10}
+
+			
+
+
 		def getTurn(self):
 			return self.turn
 		
@@ -580,7 +610,4 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 			else:
 				return False
 
-
-game = Game("Test")
-game.initializeBoard()
 
