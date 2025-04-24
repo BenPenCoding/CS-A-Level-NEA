@@ -18,11 +18,6 @@ My objectives:
 	•	Create an algorithm that analyses for check/checkmate. 
 	•	To analyse for check, before the user or computer makes a move traverse through the tree of all possible moves of the opponent and if any involve taking the current player’s king, restrict possible moves to those that protect the king.
 	•	To analyse for checkmate the process is used, along with analysing the possible moves on the next go. See the flowcharts in the modelling section for more details.
-	•	Allow the user to play Chess over networks.
-	•	Create a WebSocket server that will receive and send data.
-	•	Configure the server to receive data (a player’s move) and send said data to the other player.
-	•	Configure the server to send and receive data that represents a change in game state (E.g. checkmate, resignation)
-	•	Allow both clients to connect to the created WebSocket server and send data to/receive data from it 
 	•	Allow the user to play Chess against a computer in a tutorial mode.
 	•	Use an algorithm where the best moves a player can make is found.
 	•	The algorithm will find the best move a player can make (which move has the most value) and return the tile coordinate to move to, and the piece to move.
