@@ -329,8 +329,8 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 	def setPieceType(self, pieceType):	#'Setter' for the pieceType attribute, called when a piece is instantiated or a pawn reaches the other side of the board and can change into another piece
 		self.pieceType = pieceType
 
-	def setPieceColour(Self, pieceColour):	#'Setter' for the pieceColour attribute, called when a piece is instantiated 
-		self.pieceColour = pieceColour
+	def setPieceColour(self, newPieceColour):	#'Setter' for the pieceColour attribute, called when a piece is instantiated 
+		self.pieceColour = newPieceColour
 
 	def increaseTimesMoved(self):
 		self.timesMoved += 1
@@ -388,7 +388,6 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 						rankIncrement, FileIncrement = 0, 1
 					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
 						print("Fatal error, Rook class switch/case statement experienced a larger increment value than expected.")
-						sleep(5)	#DEBUG - Pauses the program for five seconds to allow the tester to interpret the error message 
 						quit()		#DEBUG - Quits the program entirely
 
 				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
@@ -439,7 +438,6 @@ class Bishop(Piece):			#A class that represents the bishop chess piece, which in
 						rankIncrement, FileIncrement = 1, 1
 					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
 						print("Fatal error, Bishop class switch/case statement experienced a larger increment value than expected.")
-						sleep(5)	#DEBUG - Pauses the program for five seconds to allow the tester to interpret the error message 
 						quit()		#DEBUG - Quits the program entirely
 
 				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
@@ -523,10 +521,8 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 						rankIncrement, FileIncrement = 0, 1
 					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
 						print("Fatal error, Rook class switch/case statement experienced a larger increment value than expected.")
-						sleep(5)	#DEBUG - Pauses the program for five seconds to allow the tester to interpret the error message 
 						quit()		#DEBUG - Quits the program entirely
 
-												#If this is the case, exit the while loop and begin checking in another direction						
 				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
 				tempFile += FileIncrement		#Increments the File of the next piece to search by the designated direction-dependent increment
 				
@@ -563,7 +559,6 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 						rankIncrement, FileIncrement = 1, 1
 					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
 						print("Fatal error, Bishop class switch/case statement experienced a larger increment value than expected.")
-						sleep(5)	#DEBUG - Pauses the program for five seconds to allow the tester to interpret the error message 
 						quit()		#DEBUG - Quits the program entirely
 
 				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
