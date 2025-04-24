@@ -73,6 +73,10 @@ def beginOfflineBot():		#Begins a chess game against a bot
 			left = piece.getFile() * 50
 			displayPieceList[game.getBoard().index(rowOfPieces)].append(DisplayPiece(top, left, piece))
 
+	#These store the algebraic notation of each move made
+	whiteNotation = []
+	blackNotation = []
+
 	#Begins the chess game's mainloop
 	running = True
 	while running:
@@ -143,8 +147,10 @@ def beginOfflineBot():		#Begins a chess game against a bot
 								
 								#Finds the algebraic notation of the move
 								notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
-								print(notation)
 								
+								#Stores the algebraic notation in its respective array
+								whiteNotation.append(notation)
+
 								#Makes the move on the display array (frontend)
 								displayPieceList[firstRank][firstFile] = DisplayPiece(firstRank*50, firstFile*50,  game.getPieceAtLocation(firstRank, firstFile))
 								displayPieceList[secondRank][secondFile] = DisplayPiece(secondRank*50, secondFile*50,  game.getPieceAtLocation(secondRank, secondFile))
@@ -158,6 +164,7 @@ def beginOfflineBot():		#Begins a chess game against a bot
 								if game.getKing(game.getTurn()).isPieceInCheckmate(game):	#If a player places their oppositions king in checkmate, end game
 									print(f"{oppositionColour} wins the game by checkmate!")
 									running = False
+
 			else:	#If it's the bot's move
 				time.sleep(2)
 				move = game.getBestMove(2,"Black", "Black")		#Find the best move
@@ -191,8 +198,8 @@ def beginOfflineBot():		#Begins a chess game against a bot
 				
 				#Finds the algebraic notation of the move	
 				notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
-				print(notation)
-				
+				blackNotation.append(notation)				
+
 				#Makes the move on the display array (frontend)
 				displayPieceList[firstRank][firstFile] = DisplayPiece(firstRank*50, firstFile*50,  game.getPieceAtLocation(firstRank, firstFile))
 				displayPieceList[secondRank][secondFile] = DisplayPiece(secondRank*50, secondFile*50,  game.getPieceAtLocation(secondRank, secondFile))
@@ -224,6 +231,10 @@ def beginOfflineMultiplayer():		#Starts
 			top = piece.getRank() * 50
 			left = piece.getFile() * 50
 			displayPieceList[game.getBoard().index(rowOfPieces)].append(DisplayPiece(top, left, piece))
+
+	#These store the algebraic notation of each move made
+	whiteNotation = []
+	blackNotation = []
 
 	running = True
 
@@ -286,7 +297,12 @@ def beginOfflineMultiplayer():		#Starts
 							game.move(firstClickedPiece.piece, secondClickedPiece.piece)
 												
 							notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
-							print(notation)
+							
+							#Stores the algebraic notation in its respective array
+							if firstClickedPiece.getPieceColour() == "White":
+								whiteNotation.append(notation)
+							else:
+								blackNotation.append(notation)
 							
 							displayPieceList[firstRank][firstFile] = DisplayPiece(firstRank*50, firstFile*50,  game.getPieceAtLocation(firstRank, firstFile))
 							displayPieceList[secondRank][secondFile] = DisplayPiece(secondRank*50, secondFile*50,  game.getPieceAtLocation(secondRank, secondFile))
