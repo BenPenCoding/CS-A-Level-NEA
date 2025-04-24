@@ -1,13 +1,20 @@
 import pygame
 import os
-from ChessEngine import *
 import time 
+import sys
+from ChessEngine import *
 
+#Instantiates a pygame screen and its size attributes
 pygame.init()
 width = 800
 height = 600
 screen = pygame.display.set_mode((width,height))
 
+font = pygame.font.SysFont('Arial', 12)
+checkmateFont = pygame.font.SysFont('Arial', 40)
+buttonFont = pygame.font.SysFont('Arial', 20)
+
+#Classes
 class DisplayPiece(pygame.sprite.Sprite):
 	
 	def __init__(self, top, left, piece):
@@ -42,27 +49,32 @@ class DisplayPiece(pygame.sprite.Sprite):
 	def isHighlighted(self):
 		return self.highlighted
 
-def deselectAll(pieces):
+#Functions
+def deselectAll(pieces):	#Iterates through each display piece and deselects all
 	for row in pieces:
 		for piece in row:
 			if piece.isSelected():
 				piece.clicked()
 
-def unhighlightAll(pieces):
+def unhighlightAll(pieces):	#Iterates through each display piece and unhighlights all
 	for row in pieces:
 		for piece in row:
 			piece.unhighlight()
 
-def returnSelected(pieces):
+def returnSelected(pieces):	#Iterates through each display piece and returns a piece if it's selected
 	for row in pieces:
 		for piece in row:
 			if piece.isSelected():
 				return piece
-	return None
+	return None				#If no piece is selected, return None
 
 def beginOfflineBot():		#Begins a chess game against a bot
 	
+	pygame.display.set_caption('Build Your Chess - Offline vs bot')
+
 	game = createGame("Game")	#Creates a Game piece, game
+
+	winnerColour = None
 
 	#Creates and fills the list that will contain all display pieces (frontend)
 	displayPieceList = [[],[],[],[],[],[],[],[]]	
@@ -80,7 +92,7 @@ def beginOfflineBot():		#Begins a chess game against a bot
 	#Begins the chess game's mainloop
 	running = True
 	while running:
-		
+
 		for event in pygame.event.get(): 	#Loops through all current events that pygame has detected
 			
 			#If game turn is white's, then it's the user's turn
@@ -162,11 +174,13 @@ def beginOfflineBot():		#Begins a chess game against a bot
 								oppositionColour = "White" if game.getTurn() == "Black" else "Black"	#Finds the opposite colour to the one stored currently
 
 								if game.getKing(game.getTurn()).isPieceInCheckmate(game):	#If a player places their oppositions king in checkmate, end game
-									print(f"{oppositionColour} wins the game by checkmate!")
+									winnerColour = oppositionColour
 									running = False
 
 			else:	#If it's the bot's move
-				time.sleep(2)
+
+				time.sleep(1) #Temporarily stops the program to make the bot seem more human
+
 				move = game.getBestMove(2,"Black", "Black")		#Find the best move
 				
 				piece1 = move[0][0]		#Assigns the piece used in the best move to piece1 
@@ -215,14 +229,72 @@ def beginOfflineBot():		#Begins a chess game against a bot
 			for piece in rowOfPieces:
 				screen.blit(piece.image,piece.rect)
 		
+		#Displays the "White" and "Black" titles
+		screen.blit(font.render("White", True, (0,0,0)), (450, 10))			
+		screen.blit(font.render("Black", True, (0,0,0)), (600, 10))			
+
+		#Displays the notation from moving the white pieces
+		top = 30
+		left = 450
+		for notation in whiteNotation:
+			screen.blit(font.render(notation, True, (255,0,0)), (left, top))			
+			top += 20
+		
+		#Displays the notation from moving the black pieces
+		top = 30
+		left = 600
+		for notation in blackNotation:
+			screen.blit(font.render(notation, True, (255,0,0)), (left, top))			
+			top += 20
+
 		#Updates the screen every frame	
 		pygame.display.update()
-		
+	
+	#Displays a screen that celebrates the winner (if there is one)
+	if winnerColour != None:
+		checkmateScreen = True
+		while checkmateScreen:
+			
+			for event in pygame.event.get():	#Iterates through all events that pygame has detected
+				
+				if event.type == pygame.MOUSEBUTTONUP:		#If the mouse button is clicked
+
+					left, top = pygame.mouse.get_pos()		#Get the position of the mouse click
+
+					#If the mouse click is within the exit to menu button's region then exit to menu
+					if left > 340 and left < 440 and top > 450 and top < 475:	
+						checkmateScreen = False
+						return "Exit to menu"
+
+					#If the mouse click is within the play again button's region then play again
+					if left > 350 and left < 450 and top > 400 and top < 425:
+						checkmateScreen = False
+						beginOfflineMultiplayer()						
+
+				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
+					checkmateScreen = False
+			
+			screen.fill((0,255,0))		#Fills the screen green
+			
+			#Displays a congratulations message to the winner
+			screen.blit(checkmateFont.render(f"Congratulations! {winnerColour} wins by checkmate.", True, (0,0,0)), (20,300))	
+			
+			#Displays the play again button
+			screen.blit(buttonFont.render("Play again", True, (0,0,0)), (350, 400))
+
+			#Displays the exit to menu button
+			screen.blit(buttonFont.render("Exit to menu", True, (0,0,0)), (340, 450) )
+
+			pygame.display.update()		#Updates the screen
 	  
 
 def beginOfflineMultiplayer():		#Starts 
 
+	pygame.display.set_caption('Build Your Chess - Offline multiplayer')
+
 	game = createGame("Game")
+
+	winnerColour = None
 
 	displayPieceList = [[],[],[],[],[],[],[],[]]	
 
@@ -299,7 +371,7 @@ def beginOfflineMultiplayer():		#Starts
 							notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
 							
 							#Stores the algebraic notation in its respective array
-							if firstClickedPiece.getPieceColour() == "White":
+							if firstClickedPiece.piece.getPieceColour() == "White":
 								whiteNotation.append(notation)
 							else:
 								blackNotation.append(notation)
@@ -313,21 +385,76 @@ def beginOfflineMultiplayer():		#Starts
 							
 							oppositionColour = "White" if game.getTurn() == "Black" else "Black"
 							if game.getKing(game.getTurn()).isPieceInCheckmate(game):
-								print(f"{oppositionColour} wins the game by checkmate!")
+								winnerColour = oppositionColour
 								running = False
 							
 							
 			elif event.type == pygame.QUIT:
 				running = False
 		
+		#Displays 
 		screen.fill((255, 255, 255))
 		for rowOfPieces in displayPieceList:
 			for piece in rowOfPieces:
 				screen.blit(piece.image,piece.rect)
-				
+
+		#Displays the "White" and "Black" titles
+		screen.blit(font.render("White", True, (0,0,0)), (450, 10))			
+		screen.blit(font.render("Black", True, (0,0,0)), (600, 10))			
+
+		#Displays the notation from moving the white pieces
+		top = 30
+		left = 450
+		for notation in whiteNotation:
+			screen.blit(font.render(notation, True, (255,0,0)), (left, top))			
+			top += 20
+		
+		#Displays the notation from moving the black pieces
+		top = 30
+		left = 600
+		for notation in blackNotation:
+			screen.blit(font.render(notation, True, (255,0,0)), (left, top))			
+			top += 20
+		
 		pygame.display.update()
 
-beginOfflineBot()		
+	#Displays a screen that celebrates the winner (if there is one)
+	if winnerColour != None:
+		checkmateScreen = True
+		while checkmateScreen:
+			
+			for event in pygame.event.get():	#Iterates through all events that pygame has detected
+				
+				if event.type == pygame.MOUSEBUTTONUP:		#If the mouse button is clicked
+
+					left, top = pygame.mouse.get_pos()		#Get the position of the mouse click
+
+					#If the mouse click is within the exit to menu button's region then exit to menu
+					if left > 340 and left < 440 and top > 450 and top < 475:	
+						checkmateScreen = False
+						return "Exit to menu"
+
+					#If the mouse click is within the play again button's region then play again
+					if left > 350 and left < 450 and top > 400 and top < 425:
+						checkmateScreen = False
+						beginOfflineMultiplayer()						
+
+				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
+					checkmateScreen = False
+			
+			screen.fill((0,255,0))		#Fills the screen green
+			
+			#Displays a congratulations message to the winner
+			screen.blit(checkmateFont.render(f"Congratulations! {winnerColour} wins by checkmate.", True, (0,0,0)), (20,300))	
+			
+			#Displays the play again button
+			screen.blit(buttonFont.render("Play again", True, (0,0,0)), (350, 400))
+
+			#Displays the exit to menu button
+			screen.blit(buttonFont.render("Exit to menu", True, (0,0,0)), (340, 450) )
+
+			pygame.display.update()		#Updates the screen
+		
 pygame.quit()
 
 
