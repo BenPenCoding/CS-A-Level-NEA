@@ -1,5 +1,6 @@
 #Libraries
 from random import *
+
 #Functions
 def createGame(name):
 	global game
