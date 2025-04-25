@@ -9,7 +9,7 @@ salt = "ParanoidNokiaPigstepStrangers"
 
 def createTables():
 
-    connection = sqlite3.connect(os.path.join(path,'UserData.db'))
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
     cursor = connection.cursor()
 
     cursor.execute('''
@@ -28,16 +28,16 @@ def createTables():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS gameData (
             gameName TEXT PRIMARY KEY,
-            object_array BLOB NOT NULL,
-            meta1 TEXT,
-            meta2 TEXT)''')
+            board BLOB NOT NULL,
+            turn TEXT,
+            numMoves TEXT)''')
 
     connection.commit()
     connection.close()
 
 def emptyTable(tableName):
 
-    connection = sqlite3.connect(os.path.join(path,'UserData.db'))
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
     cursor = connection.cursor()
 
     try:
@@ -52,7 +52,7 @@ def emptyTable(tableName):
 
 def addUser(username, password):
     
-    connection = sqlite3.connect(os.path.join(path,'UserData.db'))
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
     cursor = connection.cursor()
 
     password = hashlib.md5(f"{password}{salt}".encode('utf-8'))
@@ -70,7 +70,7 @@ def addUser(username, password):
 
 def loginUser(username, password):
 
-    connection = sqlite3.connect(os.path.join(path,'UserData.db'))
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
     cursor = connection.cursor()
 
     cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
@@ -88,16 +88,16 @@ def loginUser(username, password):
         return False
 
 
-def saveGame(username, gameName, board, turn, numGoes):
+def saveGame(username, gameName, board, turn, numMoves):
 
-    connection = sqlite3.connect(os.path.join(path,'UserData.db'))
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
     cursor = connection.cursor()
 
     boardBlob = pickle.dumps(board)
 
     try:
         cursor.execute(
-            "INSERT INTO gameData (gameName, object_array, meta1, meta2) VALUES (?, ?, ?, ?)", (gameName, boardBlob, turn, numGoes))
+            "INSERT INTO gameData (gameName, board, turn, numMoves) VALUES (?, ?, ?, ?)", (gameName, boardBlob, turn, numMoves))
 
     except sqlite3.IntegrityError:
         print("Game name already exists")
@@ -110,5 +110,41 @@ def saveGame(username, gameName, board, turn, numGoes):
 
 def getAvailableSaves(username):
 
-    connection = sqlite3.connect(os.path.join(path,'UserData.db'))
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
     cursor = connection.cursor()
+
+    cursor.execute("SELECT gameName from userData WHERE username = ?", (username,))
+
+    data = cursor.fetchall()
+    
+    if not data:
+
+        print("No games found")
+        connection.close()
+        return None
+
+    else:
+
+        gameNames = [Tuple[0] for Tuple in data]
+        connection.close()
+        return gameNames 
+
+def getDataFromSave(gameName):
+
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT board, turn, numMoves FROM gameData WHERE gameName = ?", (gameName,))
+
+    data = cursor.fetchone()
+
+    if not data:
+        print("No game found by that name.")
+        return None
+
+    else:
+        board = pickle.loads(data[0])
+        turn = data[1]
+        numMoves = data[2]
+        return board, turn, numMoves
+
