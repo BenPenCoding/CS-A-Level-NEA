@@ -68,11 +68,14 @@ def returnSelected(pieces):	#Iterates through each display piece and returns a p
 				return piece
 	return None				#If no piece is selected, return None
 
-def beginOfflineBot():		#Begins a chess game against a bot
+def beginOfflineBot(board):		#Begins a chess game against a bot
 	
 	pygame.display.set_caption('Build Your Chess - Offline vs bot')
 
 	game = createGame("Game")	#Creates a Game piece, game
+
+	if board != None:	#If the game is started from a previously saved game
+		game.setBoard(board)	#Set the board to the board from the previously saved game
 
 	winnerColour = None
 
@@ -98,26 +101,35 @@ def beginOfflineBot():		#Begins a chess game against a bot
 			#If game turn is white's, then it's the user's turn
 			if game.getTurn() == "White":	
 				if event.type == pygame.MOUSEBUTTONUP:
+
 					left, top = pygame.mouse.get_pos()
-					if left > 399 or top > 399:
-						pass
+
+					if left > 399 or top > 399:		#If click was inside the board display
+						
+						if left > 50 and left < 150 and top > 450 and top < 500:	#If click was inside the save button
+							return game.getBoard, game.getTurn, game.getNumMoves	#Returns to menu with data about the game to save to the database				
+
+						if left > 250 and left < 300 and top > 450 and top < 500: 	#If click was inside the exit to menu button
+							return "Exit to menu"									#Returns to menu 
 					else:
 						
 						clickedPiece = displayPieceList[int(top/50)][int(left/50)]	#Finds individual piece that is clicked on
 						
 						if returnSelected(displayPieceList) == None:				#If no other pieces are selected
 							
-							if clickedPiece.piece.getPieceColour() != game.turn:			#If selected piece is not the colour of the current turn
-								continue										#Skip it 
+							if clickedPiece.piece.getPieceColour() != game.turn:	#If selected piece is not the colour of the current turn
+								continue											#Skip it 
 							
 							clickedPiece.clicked()										#Select this piece
 							if clickedPiece.piece.getPieceType() != "Empty":					#If piece is not empty
 								possibleMoveLocations = clickedPiece.piece.getPossibleMoveLocations(game)	#Find possible move locations
 								
 								if game.getKing(game.getTurn()).isPieceInCheck():	#If the same coloured king is in check we can only move pieces that would prevent this
-									pieceRank, pieceFile = clickedPiece.piece.getBoardCoords()			#Saves a copy of the clicked piece's locationfor later reference
+									pieceRank, pieceFile = clickedPiece.piece.getBoardCoords()			#Saves a copy of the clicked piece's location for later reference
+
 									for moveLocation in possibleMoveLocations:						#Repeats through all possible move locations
 										takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
+
 										#Fake move, where the piece is moved, the program checks if the king piece is in check, then highlights the move if not
 										game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), Piece("Empty", None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
 										game.setPieceAtLocation(moveLocation[0], moveLocation[1], clickedPiece.piece)																	
@@ -247,6 +259,16 @@ def beginOfflineBot():		#Begins a chess game against a bot
 			screen.blit(font.render(notation, True, (255,0,0)), (left, top))			
 			top += 20
 
+		#Displays the save button
+		top = 450
+		left = 50
+		screen.blit(buttonFont.render("Save to database", True, (0,0,0)), (left, top))	
+
+		#Displays the exit to menu button
+		top = 450
+		left = 250
+		screen.blit(buttonFont.render("Exit to menu", True, (0,0,0)), (left, top))	
+		
 		#Updates the screen every frame	
 		pygame.display.update()
 	
@@ -269,8 +291,8 @@ def beginOfflineBot():		#Begins a chess game against a bot
 					#If the mouse click is within the play again button's region then play again
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
-						beginOfflineMultiplayer()						
-
+						beginOfflineMultiplayer(None)						
+						
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
 					checkmateScreen = False
 			
@@ -288,11 +310,14 @@ def beginOfflineBot():		#Begins a chess game against a bot
 			pygame.display.update()		#Updates the screen
 	  
 
-def beginOfflineMultiplayer():		#Starts 
+def beginOfflineMultiplayer(board):		#Starts offline multiplayer
 
 	pygame.display.set_caption('Build Your Chess - Offline multiplayer')
-
+	
 	game = createGame("Game")
+
+	if board != None:	#If the game is started from a previously saved game
+		game.setBoard(board)	#Set the board to the board from the previously saved game
 
 	winnerColour = None
 
@@ -315,8 +340,14 @@ def beginOfflineMultiplayer():		#Starts
 		for event in pygame.event.get():
 			if event.type == pygame.MOUSEBUTTONUP:
 				left, top = pygame.mouse.get_pos()
+
 				if left > 399 or top > 399:
-					pass
+					if left > 50 and left < 150 and top > 450 and top < 500:	#If click was inside the save button
+						return game.getBoard, game.getTurn, game.getNumMoves	#Returns to menu with data about the game to save to the database				
+
+					if left > 250 and left < 300 and top > 450 and top < 500: 	#If click was inside the exit to menu button
+						return "Exit to menu"									#Returns to menu
+
 				else:
 					clickedPiece = displayPieceList[int(top/50)][int(left/50)]	#Finds individual piece that is clicked on
 					
@@ -373,6 +404,7 @@ def beginOfflineMultiplayer():		#Starts
 							#Stores the algebraic notation in its respective array
 							if firstClickedPiece.piece.getPieceColour() == "White":
 								whiteNotation.append(notation)
+
 							else:
 								blackNotation.append(notation)
 							
@@ -392,7 +424,7 @@ def beginOfflineMultiplayer():		#Starts
 			elif event.type == pygame.QUIT:
 				running = False
 		
-		#Displays 
+		#Displays each of the pieces on the board
 		screen.fill((255, 255, 255))
 		for rowOfPieces in displayPieceList:
 			for piece in rowOfPieces:
@@ -416,6 +448,16 @@ def beginOfflineMultiplayer():		#Starts
 			screen.blit(font.render(notation, True, (255,0,0)), (left, top))			
 			top += 20
 		
+		#Displays the save button
+		top = 450
+		left = 50
+		screen.blit(buttonFont.render("Save to database", True, (0,0,0)), (left, top))	
+
+		#Displays the exit to menu button
+		top = 450
+		left = 250
+		screen.blit(buttonFont.render("Exit to menu", True, (0,0,0)), (left, top))	
+
 		pygame.display.update()
 
 	#Displays a screen that celebrates the winner (if there is one)
@@ -437,7 +479,7 @@ def beginOfflineMultiplayer():		#Starts
 					#If the mouse click is within the play again button's region then play again
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
-						beginOfflineMultiplayer()						
+						beginOfflineMultiplayer(None)		 				
 
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
 					checkmateScreen = False
@@ -454,7 +496,7 @@ def beginOfflineMultiplayer():		#Starts
 			screen.blit(buttonFont.render("Exit to menu", True, (0,0,0)), (340, 450) )
 
 			pygame.display.update()		#Updates the screen
-		
+beginOfflineBot(None)
 pygame.quit()
 
 
