@@ -216,7 +216,10 @@ class Game():	#A class that represents a chess game with attributes that will be
 
 		def setTurn(self, newTurn):
 			self.turn = newTurn
-	
+
+		def setName(self, newName):
+			self.name = newName
+
 		def getNumMoves(self):
 			return self.numMoves
 		
