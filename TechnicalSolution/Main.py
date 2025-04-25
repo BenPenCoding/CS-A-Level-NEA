@@ -1,6 +1,7 @@
 #Libraries
-import pygame
+import tkinter
+import websockets
 
-pygame.init()
+
 
 #MAKE A MENU OF SOME KIND 

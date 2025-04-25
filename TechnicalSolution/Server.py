@@ -2,7 +2,10 @@ import sqlite3
 import os
 import hashlib
 import pickle
+import websockets
+import asyncio
 
+#Database
 path = os.path.dirname(__file__)
 
 salt = "ParanoidNokiaPigstepStrangers"
@@ -50,6 +53,20 @@ def emptyTable(tableName):
         connection.commit()
         connection.close()
 
+def doesUserExist(username):
+
+    connection = sqlite3.connect(os.path.join(path,'userDB.db'))
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT username FROM users WHERE username = ?", (username,))
+
+    result = cursor.fetchone()
+
+    if result:
+        return True
+    else:
+        return False
+
 def addUser(username, password):
     
     connection = sqlite3.connect(os.path.join(path,'userDB.db'))
@@ -80,12 +97,12 @@ def loginUser(username, password):
     connection.close()
 
     if result and result[0] == hashlib.md5(f"{password}{salt}".encode('utf-8')).digest():
-        print("Login success.")
-        return True
+        msg = "Login success."
+        return True, msg
 
     else:
-        print("Invalid username or password")
-        return False
+        msg = "Invalid username or password"
+        return False, msg
 
 
 def saveGame(username, gameName, board, turn, numMoves):
@@ -96,17 +113,16 @@ def saveGame(username, gameName, board, turn, numMoves):
     boardBlob = pickle.dumps(board)
 
     try:
-        cursor.execute(
-            "INSERT INTO gameData (gameName, board, turn, numMoves) VALUES (?, ?, ?, ?)", (gameName, boardBlob, turn, numMoves))
-
+        cursor.execute("INSERT INTO gameData (gameName, board, turn, numMoves) VALUES (?, ?, ?, ?)", (gameName, boardBlob, turn, numMoves))
+        cursor.execute("INSERT INTO userData (username, gameName) VALUES (?, ?)",(username, gameName))
+        connection.commit()
+        connection.close()
+        return True, "Save successful"
     except sqlite3.IntegrityError:
         print("Game name already exists")
-
-    cursor.execute(
-        "INSERT INTO userData (username, gameName) VALUES (?, ?)",(username, gameName))
-
-    connection.commit()
-    connection.close()
+        connection.commit()
+        connection.close()
+        return False, "Save unsuccessful, game name already exists"
 
 def getAvailableSaves(username):
 
@@ -139,12 +155,67 @@ def getDataFromSave(gameName):
     data = cursor.fetchone()
 
     if not data:
-        print("No game found by that name.")
-        return None
+        return "No game found by that name."
 
     else:
-        board = pickle.loads(data[0])
+        board = data[0]
         turn = data[1]
         numMoves = data[2]
-        return board, turn, numMoves
+        return (board, turn, numMoves)
 
+#Server
+connectedClients = {}
+
+async def handler(websocket, path):
+    try:
+        # First message from the client (main.py) is a tuple like this: ("username", "password")
+        firstMessage = await websocket.recv()
+
+        try:
+            username, password = eval(firstMessage)  
+
+        except Exception:
+            await websocket.send("Invalid format. Expecting a tuple like this: (username,password)")
+            return
+
+        if doesUserExist(username):
+            loginAttempt = loginUser(username, password)
+
+            if not loginAttempt[0]:
+                await websocket.send(loginAttempt[1])
+                return
+        else:
+            addUser(username, password)
+
+        connectedClients[username] = websocket
+        await websocket.send(f"Welcome, {username}!")
+        print(f"{username} connected.")
+
+        #Expecting message to be a tuple of (gameName, board, turn, numMoves), or just a gameName string
+        async for message in websocket: 
+            try:            
+                gameName, board, turn, numMoves = eval(message)
+                msg = saveGame(username, gameName, board, turn, numMoves)[1]
+                await websocket.send(msg)
+            
+            except ValueError:
+                gameName = eval(message)
+                data = getDataFromSave(gameName)
+
+                if data == "No game found by that name.":
+                    await websocket.send("No game found by that name.")
+
+                else:
+                    data = pickle.dumps(data)
+                    await websocket.send(data)
+
+    except websockets.ConnectionClosed:
+        print(f"{username} disconnected.")
+
+    finally:
+        connectedClients.pop(username)
+
+startServer = websockets.serve(handler, "0.0.0.0", 8765)
+print("Server running...")
+asyncio.get_event_loop().run_until_complete(startServer)
+asyncio.get_event_loop().run_forever()

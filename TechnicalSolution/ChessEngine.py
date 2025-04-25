@@ -354,7 +354,7 @@ class Piece():		#A class that represents a chess piece with attributes such as p
 	def getPieceColour(self):	#'Getter' for the pieceColour attribute, returns said attribute when called
 		return self.pieceColour
 
-	def getTimesMoved(self):
+	def getTimesMoved(self):	#'Getter' for the timesMoved attribute, returns said attribute when called
 		return self.timesMoved
 	
 	#Checkers
