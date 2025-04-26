@@ -859,7 +859,7 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 			pygame.display.update()		#Updates the screen
 
 
-pygame.quit()
+
 
 
 
