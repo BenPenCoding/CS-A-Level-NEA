@@ -2,7 +2,9 @@ import sqlite3
 import os
 import hashlib
 import pickle
+import asyncio
 import websockets
+from websockets.asyncio.server import serve
 import asyncio
 
 #Database
@@ -77,10 +79,10 @@ def addUser(username, password):
     try:
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password.digest()))
         connection.commit()
-        print("User added successfully!")
+        return "User added successfully!"
 
     except sqlite3.IntegrityError:
-        print("Username is taken.")
+        return "Username is taken."
 
     finally:
         connection.close()
@@ -119,7 +121,6 @@ def saveGame(username, gameName, board, turn, numMoves):
         connection.close()
         return True, "Save successful"
     except sqlite3.IntegrityError:
-        print("Game name already exists")
         connection.commit()
         connection.close()
         return False, "Save unsuccessful, game name already exists"
@@ -166,14 +167,15 @@ def getDataFromSave(gameName):
 #Server
 connectedClients = {}
 
-async def handler(websocket, path):
+async def handler(websocket):
     try:
         # First message from the client (main.py) is a tuple like this: ("username", "password")
         firstMessage = await websocket.recv()
 
         try:
-            username, password = eval(firstMessage)  
-
+            firstMessageTuple = pickle.loads(firstMessage)  
+            username, password = firstMessageTuple
+ 
         except Exception:
             await websocket.send("Invalid format. Expecting a tuple like this: (username,password)")
             return
@@ -193,17 +195,17 @@ async def handler(websocket, path):
 
         #Expecting message to be a tuple of (gameName, board, turn, numMoves), or just a gameName string
         async for message in websocket: 
-            try:            
-                gameName, board, turn, numMoves = eval(message)
+            try:  
+                gameName, board, turn, numMoves = pickle.loads(message)
                 msg = saveGame(username, gameName, board, turn, numMoves)[1]
                 await websocket.send(msg)
             
-            except ValueError:
-                gameName = eval(message)
+            except:
+                gameName = pickle.loads(message)
                 data = getDataFromSave(gameName)
 
                 if data == "No game found by that name.":
-                    await websocket.send("No game found by that name.")
+                    await websocket.send(pickle.dumps("No game found by that name."))
 
                 else:
                     data = pickle.dumps(data)
@@ -213,9 +215,15 @@ async def handler(websocket, path):
         print(f"{username} disconnected.")
 
     finally:
-        connectedClients.pop(username)
+        if 'username' in locals():
+            connectedClients.pop(username, None)        
 
-startServer = websockets.serve(handler, "0.0.0.0", 8765)
-print("Server running...")
-asyncio.get_event_loop().run_until_complete(startServer)
-asyncio.get_event_loop().run_forever()
+
+async def runServer():
+    print("Server running...")
+    async with serve(handler, "192.168.1.122", 8765) as server:
+        await server.serve_forever()
+
+
+asyncio.run(runServer())
+

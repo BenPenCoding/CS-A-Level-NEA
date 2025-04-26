@@ -4,16 +4,6 @@ import time
 import sys
 from ChessEngine import *
 
-#Instantiates a pygame screen and its size attributes
-pygame.init()
-width = 800
-height = 600
-screen = pygame.display.set_mode((width,height))
-
-font = pygame.font.SysFont('Arial', 12)
-checkmateFont = pygame.font.SysFont('Arial', 40)
-buttonFont = pygame.font.SysFont('Arial', 20)
-
 #Classes
 class DisplayPiece(pygame.sprite.Sprite):
 	
@@ -68,14 +58,44 @@ def returnSelected(pieces):	#Iterates through each display piece and returns a p
 				return piece
 	return None				#If no piece is selected, return None
 
-def beginOfflineBot(board):		#Begins a chess game against a bot
+def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 	
+	#Instantiates a pygame screen and its size attributes
+	pygame.init()
+	width = 800
+	height = 600
+	screen = pygame.display.set_mode((width,height))
+
+	font = pygame.font.SysFont('Arial', 12)
+	checkmateFont = pygame.font.SysFont('Arial', 40)
+	buttonFont = pygame.font.SysFont('Arial', 20)
+
 	pygame.display.set_caption('Build Your Chess - Offline vs bot')
 
 	game = createGame("Game")	#Creates a Game piece, game
 
 	if board != None:	#If the game is started from a previously saved game
 		game.setBoard(board)	#Set the board to the board from the previously saved game
+
+	if turn != None:
+		game.setTurn(turn)
+
+	if numMoves != None:
+		game.setNumMoves(numMoves)
+
+	game.setPieces("White", [])
+	game.setPieces("Black", [])
+
+	for row in game.getBoard():
+		for piece in row:
+			if piece.getPieceType() == "White":
+				game.whitePieces.append(piece)
+			
+			elif piece.getPieceType() == "Black":
+				game.blackPieces.append(piece)
+
+			else:
+				pass
 
 	winnerColour = None
 
@@ -107,9 +127,11 @@ def beginOfflineBot(board):		#Begins a chess game against a bot
 					if left > 399 or top > 399:		#If click was inside the board display
 						
 						if left > 50 and left < 150 and top > 450 and top < 500:	#If click was inside the save button
-							return game.getBoard, game.getTurn, game.getNumMoves	#Returns to menu with data about the game to save to the database				
+							pygame.quit()
+							return game.getBoard(), game.getTurn(), game.getNumMoves()	#Returns to menu with data about the game to save to the database				
 
 						if left > 250 and left < 300 and top > 450 and top < 500: 	#If click was inside the exit to menu button
+							pygame.quit()
 							return "Exit to menu"									#Returns to menu 
 					else:
 						
@@ -285,12 +307,14 @@ def beginOfflineBot(board):		#Begins a chess game against a bot
 
 					#If the mouse click is within the exit to menu button's region then exit to menu
 					if left > 340 and left < 440 and top > 450 and top < 475:	
-						checkmateScreen = False
+						checkmateScreen = False	
+						pygame.quit()
 						return "Exit to menu"
 
 					#If the mouse click is within the play again button's region then play again
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
+						pygame.quit()
 						beginOfflineMultiplayer(None)						
 						
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
@@ -310,14 +334,46 @@ def beginOfflineBot(board):		#Begins a chess game against a bot
 			pygame.display.update()		#Updates the screen
 	  
 
-def beginOfflineMultiplayer(board):		#Starts offline multiplayer
+def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
+
+	#Instantiates a pygame screen and its size attributes
+	pygame.init()
+	width = 800
+	height = 600
+	screen = pygame.display.set_mode((width,height))
+
+	font = pygame.font.SysFont('Arial', 12)
+	checkmateFont = pygame.font.SysFont('Arial', 40)
+	buttonFont = pygame.font.SysFont('Arial', 20)
 
 	pygame.display.set_caption('Build Your Chess - Offline multiplayer')
 	
 	game = createGame("Game")
 
+	print(board)
+
 	if board != None:	#If the game is started from a previously saved game
 		game.setBoard(board)	#Set the board to the board from the previously saved game
+
+	if turn != None:
+		game.setTurn(turn)
+
+	if numMoves != None:
+		game.setNumMoves(numMoves)
+
+	game.setPieces("White", [])
+	game.setPieces("Black", [])
+
+	for row in game.getBoard():
+		for piece in row:
+			if piece.getPieceColour() == "White":
+				game.addPiece("White", piece)
+			
+			elif piece.getPieceColour() == "Black":
+				game.addPiece("Black", piece)
+
+			else:
+				pass
 
 	winnerColour = None
 
@@ -343,9 +399,11 @@ def beginOfflineMultiplayer(board):		#Starts offline multiplayer
 
 				if left > 399 or top > 399:
 					if left > 50 and left < 150 and top > 450 and top < 500:	#If click was inside the save button
-						return game.getBoard, game.getTurn, game.getNumMoves	#Returns to menu with data about the game to save to the database				
+						pygame.quit()
+						return game.getBoard(), game.getTurn(), game.getNumMoves()	#Returns to menu with data about the game to save to the database				
 
 					if left > 250 and left < 300 and top > 450 and top < 500: 	#If click was inside the exit to menu button
+						pygame.quit()
 						return "Exit to menu"									#Returns to menu
 
 				else:
@@ -474,11 +532,13 @@ def beginOfflineMultiplayer(board):		#Starts offline multiplayer
 					#If the mouse click is within the exit to menu button's region then exit to menu
 					if left > 340 and left < 440 and top > 450 and top < 475:	
 						checkmateScreen = False
+						pygame.quit()
 						return "Exit to menu"
 
 					#If the mouse click is within the play again button's region then play again
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
+						pygame.quit()
 						beginOfflineMultiplayer(None)		 				
 
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
@@ -496,7 +556,8 @@ def beginOfflineMultiplayer(board):		#Starts offline multiplayer
 			screen.blit(buttonFont.render("Exit to menu", True, (0,0,0)), (340, 450) )
 
 			pygame.display.update()		#Updates the screen
-beginOfflineBot(None)
+
+
 pygame.quit()
 
 

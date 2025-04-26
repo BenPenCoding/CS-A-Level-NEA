@@ -222,7 +222,10 @@ class Game():	#A class that represents a chess game with attributes that will be
 
 		def getNumMoves(self):
 			return self.numMoves
-		
+	
+		def setNumMoves(self, newNumMoves):
+			self.numMoves = newNumMoves
+
 		def getKing(self,colour):
 			pieces = self.getPieces(colour)
 			for piece in pieces:
@@ -305,7 +308,13 @@ class Game():	#A class that represents a chess game with attributes that will be
 				self.blackPieces = pieces
 			else:
 				self.whitePieces = pieces
-	
+
+		def addPiece(self, colour, piece):
+			if colour == "Black":
+				self.blackPieces.append(piece)
+			else:
+				self.whitePieces.append(piece)
+
 class Piece():		#A class that represents a chess piece with attributes such as piece type and piece location on the board
 	def __init__(self, pieceType, pieceColour, rank, File):	#Constructor for the Piece class. Declares the:  
 		self.pieceType = pieceType              #type of piece (pawn, rook, etc)
