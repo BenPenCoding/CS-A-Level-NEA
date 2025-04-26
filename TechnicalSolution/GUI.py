@@ -316,7 +316,7 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
 						pygame.quit()
-						beginOfflineBot(None)						
+						return beginOfflineBot(None, None, None)						
 						
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
 					checkmateScreen = False
@@ -619,7 +619,7 @@ def beginTutorial(board, turn, numMoves):		#Begins a chess game against a bot
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
 						pygame.quit()
-						beginTutorial(None)						
+						return beginTutorial(None, None, None)						
 						
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
 					checkmateScreen = False
@@ -840,7 +840,7 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
 						pygame.quit()
-						beginOfflineMultiplayer(None)		 				
+						return beginOfflineMultiplayer(None, None, None)		 				
 
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
 					checkmateScreen = False
