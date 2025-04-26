@@ -41,7 +41,7 @@ def beginNewGame(type, menuWindow):
 
     elif type == "tutorial":
         menuWindow.destroy()
-        #result = beginTutorial(None,None,None)
+        result = beginTutorial(None,None,None)
 
     else:
         menuWindow.destroy()

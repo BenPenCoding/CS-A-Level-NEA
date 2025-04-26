@@ -106,7 +106,7 @@ class Game():	#A class that represents a chess game with attributes that will be
 			for piece in self.getPieces(colour):
 				for moveLocation in piece.getPossibleMoveLocations(game):
 					moves.append([piece, moveLocation])
-
+					
 			bestMove = choice(moves)
 
 			if playerMove == colour:         #MAX
