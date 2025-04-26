@@ -110,11 +110,11 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 	#Iterates through the board and fills the holding arrays for both colour pieces
 	for row in game.getBoard():
 		for piece in row:
-			if piece.getPieceType() == "White":
-				game.whitePieces.append(piece)
+			if piece.getPieceColour() == "White":
+				game.addPiece("White", piece)
 			
-			elif piece.getPieceType() == "Black":
-				game.blackPieces.append(piece)
+			elif piece.getPieceColour() == "Black":
+				game.addPiece("Black", piece)
 
 			else:
 				pass
@@ -339,7 +339,7 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
 						pygame.quit()
-						beginOfflineMultiplayer(None)						
+						return beginOfflineBot(None, None, None)						
 						
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
 					checkmateScreen = False
@@ -581,7 +581,7 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 					if left > 350 and left < 450 and top > 400 and top < 425:
 						checkmateScreen = False
 						pygame.quit()
-						beginOfflineMultiplayer(None)		 				
+						return beginOfflineMultiplayer(None, None, None)		 				
 
 				elif event == pygame.QUIT:		#If the detected event is quitting the program, quit the program
 					checkmateScreen = False
