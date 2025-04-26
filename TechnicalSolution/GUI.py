@@ -5,37 +5,55 @@ import sys
 from ChessEngine import *
 
 #Classes
+
+#A class that represents a DisplayPiece with attributes such as image, which contains the image to display
 class DisplayPiece(pygame.sprite.Sprite):
 	
 	def __init__(self, top, left, piece):
-		self.piece = piece
-		self.path = os.path.dirname(__file__)
-		self.image = pygame.image.load(os.path.join(self.path,f"Images/{piece.getPieceColour()}{piece.getPieceType()}.jpg")).convert_alpha() if piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path,"Images/square.jpg")).convert_alpha()
-		self.rect = self.image.get_rect()
-		self.rect.top, self.rect.left = top, left
-		self.selected = False
+		self.piece = piece	#The Piece object attached to the DisplayPiece object
+		self.path = os.path.dirname(__file__)	#The relative filepath to this file
+
+		#Sets the image attribute to a given image type based on the piece type and colour. 
+		#convert_alpha() makes the image easier to load
+		self.image = pygame.image.load(
+		os.path.join(self.path,f"Images/{piece.getPieceColour()}{piece.getPieceType()}.jpg")
+		).convert_alpha() if piece.getPieceType() != "Empty" else pygame.image.load(
+		os.path.join(self.path,"Images/square.jpg")).convert_alpha()
+
+		self.rect = self.image.get_rect()	#Converts the image to a rectangle object
+		self.rect.top, self.rect.left = top, left	#Sets the coordinates of the rectangle object
+		self.selected = False	
 		self.highlighted = False
 
+	#A method that returns the Piece object attached to the DisplayPiece object
 	def getPiece(self):
 		return self.piece
 
+	#A method that sets the location of the DisplayPiece
 	def setLocation(self, top, left):
 		self.rect.top, self.rect.left = top, left
 	
+	#A method that reverse the bool value of the 'selected' attribute
 	def clicked(self):
 		self.selected = not self.selected
 		
+	#A method that returns True if selected is True, otherwise False
 	def isSelected(self):
 		return self.selected
 	
+	#A method that changes the image attribute to a highlighted version and 
+	#sets the 'highlighted' attribute to True
 	def highlight(self):
 		self.image = pygame.image.load(os.path.join(self.path,f"Images/{self.piece.getPieceColour()}{self.piece.getPieceType()}H.jpg")).convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path, "Images/squareH.jpg")).convert_alpha()
 		self.highlighted = True
 		
+	#A method that changes the image attribute to a non-highlighted version and 
+	#sets the 'highlighted' attribute to False
 	def unhighlight(self):
 		self.image = pygame.image.load(os.path.join(self.path, f"Images/{self.piece.getPieceColour()}{self.piece.getPieceType()}.jpg")).convert_alpha() if self.piece.getPieceType() != "Empty" else pygame.image.load(os.path.join(self.path, "Images/square.jpg")).convert_alpha()
 		self.highlighted = False
-	
+
+	#A method that returns True if highlighted is True, otherwise False
 	def isHighlighted(self):
 		return self.highlighted
 
@@ -66,10 +84,12 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 	height = 600
 	screen = pygame.display.set_mode((width,height))
 
+	#Defines the fonts that are used to display text
 	font = pygame.font.SysFont('Arial', 12)
 	checkmateFont = pygame.font.SysFont('Arial', 40)
 	buttonFont = pygame.font.SysFont('Arial', 20)
 
+	#Sets the Pygame title
 	pygame.display.set_caption('Build Your Chess - Offline vs bot')
 
 	game = createGame("Game")	#Creates a Game piece, game
@@ -77,15 +97,17 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 	if board != None:	#If the game is started from a previously saved game
 		game.setBoard(board)	#Set the board to the board from the previously saved game
 
-	if turn != None:
-		game.setTurn(turn)
+	if turn != None:	#If the game is started from a previously saved game
+		game.setTurn(turn)	#Set the turn attribute to the turn attribute from the previously saved game
 
-	if numMoves != None:
-		game.setNumMoves(numMoves)
+	if numMoves != None:	#If the game is started from a previously saved game
+		game.setNumMoves(numMoves)	#Set the numMoves attribute to the numMoves attribute from the previously saved game
 
+	#Empties the holding arrays for both colour pieces
 	game.setPieces("White", [])
 	game.setPieces("Black", [])
 
+	#Iterates through the board and fills the holding arrays for both colour pieces
 	for row in game.getBoard():
 		for piece in row:
 			if piece.getPieceType() == "White":
@@ -97,6 +119,7 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 			else:
 				pass
 
+	#Defines the winner colour 
 	winnerColour = None
 
 	#Creates and fills the list that will contain all display pieces (frontend)
@@ -142,7 +165,8 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 							if clickedPiece.piece.getPieceColour() != game.turn:	#If selected piece is not the colour of the current turn
 								continue											#Skip it 
 							
-							clickedPiece.clicked()										#Select this piece
+							clickedPiece.clicked()		#Select this piece
+
 							if clickedPiece.piece.getPieceType() != "Empty":					#If piece is not empty
 								possibleMoveLocations = clickedPiece.piece.getPossibleMoveLocations(game)	#Find possible move locations
 								
@@ -333,7 +357,6 @@ def beginOfflineBot(board, turn, numMoves):		#Begins a chess game against a bot
 
 			pygame.display.update()		#Updates the screen
 	  
-
 def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 
 	#Instantiates a pygame screen and its size attributes
@@ -342,39 +365,42 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 	height = 600
 	screen = pygame.display.set_mode((width,height))
 
+	#Defines the fonts that are used to display text
 	font = pygame.font.SysFont('Arial', 12)
 	checkmateFont = pygame.font.SysFont('Arial', 40)
 	buttonFont = pygame.font.SysFont('Arial', 20)
 
-	pygame.display.set_caption('Build Your Chess - Offline multiplayer')
-	
-	game = createGame("Game")
+	#Sets the Pygame title
+	pygame.display.set_caption('Build Your Chess - Offline vs bot')
 
-	print(board)
+	game = createGame("Game")	#Creates a Game piece, game
 
 	if board != None:	#If the game is started from a previously saved game
 		game.setBoard(board)	#Set the board to the board from the previously saved game
 
-	if turn != None:
-		game.setTurn(turn)
+	if turn != None:	#If the game is started from a previously saved game
+		game.setTurn(turn)	#Set the turn attribute to the turn attribute from the previously saved game
 
-	if numMoves != None:
-		game.setNumMoves(numMoves)
+	if numMoves != None:	#If the game is started from a previously saved game
+		game.setNumMoves(numMoves)	#Set the numMoves attribute to the numMoves attribute from the previously saved game
 
+	#Empties the holding arrays for both colour pieces
 	game.setPieces("White", [])
 	game.setPieces("Black", [])
 
+	#Iterates through the board and fills the holding arrays for both colour pieces
 	for row in game.getBoard():
 		for piece in row:
-			if piece.getPieceColour() == "White":
-				game.addPiece("White", piece)
+			if piece.getPieceType() == "White":
+				game.whitePieces.append(piece)
 			
-			elif piece.getPieceColour() == "Black":
-				game.addPiece("Black", piece)
+			elif piece.getPieceType() == "Black":
+				game.blackPieces.append(piece)
 
 			else:
 				pass
 
+	#Defines the winner colour 
 	winnerColour = None
 
 	displayPieceList = [[],[],[],[],[],[],[],[]]	
@@ -391,42 +417,51 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 
 	running = True
 
+	#Starts the Pygame mainloop
 	while running:
 		
+		#Loops through all current events that pygame has detected
 		for event in pygame.event.get():
-			if event.type == pygame.MOUSEBUTTONUP:
-				left, top = pygame.mouse.get_pos()
+			
+			if event.type == pygame.MOUSEBUTTONUP:	#If event is a click of the left mouse button
+				left, top = pygame.mouse.get_pos()	#Get coordinates of the click
 
-				if left > 399 or top > 399:
+				if left > 399 or top > 399:		#If click was not on the chess board
 					if left > 50 and left < 150 and top > 450 and top < 500:	#If click was inside the save button
-						pygame.quit()
+						pygame.quit()	#Exit Pygame
 						return game.getBoard(), game.getTurn(), game.getNumMoves()	#Returns to menu with data about the game to save to the database				
 
 					if left > 250 and left < 300 and top > 450 and top < 500: 	#If click was inside the exit to menu button
-						pygame.quit()
-						return "Exit to menu"									#Returns to menu
+						pygame.quit()	#Exit Pygame
+						return "Exit to menu"		#Returns to menu
 
 				else:
+
 					clickedPiece = displayPieceList[int(top/50)][int(left/50)]	#Finds individual piece that is clicked on
 					
-					if returnSelected(displayPieceList) == None:				#If no other pieces are selected
+					if returnSelected(displayPieceList) == None:	#If no other pieces are selected
 						
-						if clickedPiece.piece.getPieceColour() != game.turn:			#If selected piece is not the colour of the current turn
-							continue										#Skip it 
+						if clickedPiece.piece.getPieceColour() != game.turn:	#If selected piece is not the colour of the current turn
+							continue		#Return to the start of the loop 
 						
-						clickedPiece.clicked()										#Select this piece
+						clickedPiece.clicked()		#Select this piece
+
 						if clickedPiece.piece.getPieceType() != "Empty":					#If piece is not empty
 							possibleMoveLocations = clickedPiece.piece.getPossibleMoveLocations(game)	#Find possible move locations
 							
 							if game.getKing(game.getTurn()).isPieceInCheck():	#If the same coloured king is in check we can only move pieces that would prevent this
-								pieceRank, pieceFile = clickedPiece.piece.getBoardCoords()			#Saves a copy of the clicked piece's locationfor later reference
-								for moveLocation in possibleMoveLocations:						#Repeats through all possible move locations
+								pieceRank, pieceFile = clickedPiece.piece.getBoardCoords()		#Saves a copy of the clicked piece's locationfor later reference
+
+								#Repeats through all possible move locations
+								for moveLocation in possibleMoveLocations:						
 									takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
+
 									#Fake move, where the piece is moved, the program checks if the king piece is in check, then highlights the move if not
 									game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), Piece("Empty", None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
 									game.setPieceAtLocation(moveLocation[0], moveLocation[1], clickedPiece.piece)																	
 									clickedPiece.piece.setBoardCoords(moveLocation[0], moveLocation[1])
-									
+
+									#If the King piece is not in check, highlight the move									
 									if not game.getKing(game.getTurn()).isPieceInCheck():
 										displayPieceList[moveLocation[0]][moveLocation[1]].highlight()
 										
@@ -439,24 +474,28 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 								for moveLocation in possibleMoveLocations:
 									displayPieceList[moveLocation[0]][moveLocation[1]].highlight()
 									
-					else:		#If a piece is already selected
+					else:		#If a piece is already selected get both selected pieces
 						firstClickedPiece = returnSelected(displayPieceList)
 						secondClickedPiece = clickedPiece
 						
+						#If both pieces are the same deselect and unhighlight all pieces
 						if firstClickedPiece == secondClickedPiece or not secondClickedPiece.isHighlighted():
 							deselectAll(displayPieceList)
 							unhighlightAll(displayPieceList)
 						
 						else:
 							
+							#Store the location of both pieces
 							firstRank = firstClickedPiece.piece.getRank()
 							firstFile = firstClickedPiece.piece.getFile()
 							
 							secondRank = secondClickedPiece.piece.getRank()
 							secondFile = secondClickedPiece.piece.getFile()
 	
+							#Move the pieces on the Game board attribute
 							game.move(firstClickedPiece.piece, secondClickedPiece.piece)
-												
+							
+							#Finds the algebraic notation of the move 			
 							notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
 							
 							#Stores the algebraic notation in its respective array
@@ -466,19 +505,22 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 							else:
 								blackNotation.append(notation)
 							
+							#Changes the location of the DisplayPieces on the list of DisplayPieces
 							displayPieceList[firstRank][firstFile] = DisplayPiece(firstRank*50, firstFile*50,  game.getPieceAtLocation(firstRank, firstFile))
 							displayPieceList[secondRank][secondFile] = DisplayPiece(secondRank*50, secondFile*50,  game.getPieceAtLocation(secondRank, secondFile))
 							
-							
+							#Deselect and unhighlight all pieces
 							deselectAll(displayPieceList)
 							unhighlightAll(displayPieceList)
 							
-							oppositionColour = "White" if game.getTurn() == "Black" else "Black"
+							oppositionColour = "White" if game.getTurn() == "Black" else "Black"	#Reverses colour
+
+							#If the king is in checkmate, end the game and set a winner
 							if game.getKing(game.getTurn()).isPieceInCheckmate(game):
 								winnerColour = oppositionColour
 								running = False
 							
-							
+			#If the user quits pygame, end pygame					
 			elif event.type == pygame.QUIT:
 				running = False
 		
@@ -558,7 +600,6 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 			pygame.display.update()		#Updates the screen
 
 
-pygame.quit()
 
 
 
