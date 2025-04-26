@@ -195,25 +195,7 @@ class Game():	#A class that represents a chess game with attributes that will be
 
 		def getTurn(self):
 			return self.turn
-		
-		def getScore(self, colour):
-			pieceScoreDict={"Pawn":10,
-							"Bishop":30,
-							"Knight":30,	
-							"Rook":50,
-							"Queen":90,
-							"King":900}
-
-			pieces = self.getPieces(colour)
-
-			score = 0
-
-			for piece in pieces:
-				score += pieceScoreDict[piece.getPieceType()]
-			
-			return score
-
-
+	
 		def setTurn(self, newTurn):
 			self.turn = newTurn
 
