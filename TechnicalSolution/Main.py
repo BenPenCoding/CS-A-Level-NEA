@@ -23,12 +23,6 @@ async def client(request):
         reply = await websocket.recv()
         return reply
 
-def saveGame(username, password, loginWindow):
-    loginWindow.destroy()
-
-def getSave(username, password, loginWindow):
-    loginWindow.destroy()
-
 def beginNewGame(type, menuWindow):
     
     if type == "multiplayer":
