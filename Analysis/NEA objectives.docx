@@ -1,39 +1,36 @@
 My objectives:
 	•	To allow the user to simply play the game of chess against a computer.
 	•	Create a minimax algorithm to deduce the most valuable move the computer could make
-	•	Create a tree data structure containing every possible move.
+	•	Create a data structure data structure containing every possible move.
 	•	Create an algorithm to assign each possible move a value that represents the impact of said move. 
 	•	Create the Alpha-beta pruning search algorithm to decrease the number of nodes that are searched by the minimax algorithm.
-	•	Finally create the minimax algorithm that will search the tree for the move with the highest value assigned to it. 
+	•	Finally create the minimax algorithm that will search the data structure for the move with the highest value assigned to it. 
 	•	Create a user-friendly UI to show the Chess game. 
-	•	Use WPF to display an image of a Chess board that will represent the playing board.
-	•	Also use WPF to display images of Chess pieces that will represent the playing pieces.
-	•	Also use WPF to display all possible moves by changing the colour of tiles that a piece can be placed on. 
-	•	Also use WPF to display a move by changing the position of the image that represents the piece being moved.
+	•	Use Pygame  to display an image of a Chess board that will represent the playing board.
+	•	Also use Pygame  to display images of Chess pieces that will represent the playing pieces.
+	•	Also use Pygame  to display all possible moves by changing the colour of tiles that a piece can be placed on. 
+	•	Also use Pygame  to display a move by changing the position of the image that represents the piece being moved.
 	•	Allow the user to move pieces.
 	•	Allow the user to select a piece to move.
 	•	Show the user all possible moves.
 	•	Allow the user to unselect a piece and instead select a different piece and display that piece’s possible moves.
 	•	Finally allow the user to select a move and then move the piece to the desired position.
 	•	Create an algorithm that analyses for check/checkmate. 
-	•	To analyse for check, before the user or computer makes a move traverse through the tree of all possible moves of the opponent and if any involve taking the current player’s king, restrict possible moves to those that protect the king.
+	•	To analyse for check, before the user or computer makes a move traverse through the data structure of all possible moves of the opponent and if any involve taking the current player’s king, restrict possible moves to those that protect the king.
 	•	To analyse for checkmate the process is used, along with analysing the possible moves on the next go. See the flowcharts in the modelling section for more details.
 	•	Allow the user to play Chess against a computer in a tutorial mode.
 	•	Use an algorithm where the best moves a player can make is found.
 	•	The algorithm will find the best move a player can make (which move has the most value) and return the tile coordinate to move to, and the piece to move.
 	•	Change the colour of the returned piece and the tile that the algorithm recommends moving to.
 	•	Also allow the user to make their own move, they are not forced to play the recommended move.
-	•	Throughout each game with tutorial mode activated, provide hints or extra useful information. 
 	•	As player and computer make their moves, record the algebraic notation of the moves (E.g. Rg4, rook to g4) and display these to the user to help them understand this widely used notation.
 	•	Allow the user to save unfinished games of chess against the computer to be able to continue at a later date.
-	•	Allow the user to create and name a folder which will be used to store unfinished games that they save. 
 	•	Allow the user to stop an in-progress game and create a game save that stores the position of all the pieces, and who has the next move.
 	•	Allow the user to select unfinished games and continue them. To do this, the software would recreate the previous state of the game using the information stored with the game save, such as the position of pieces.
 	•	Allow the user to create a Build Your Chess account and use this to access their game saves.
 	•	Allow the user to sign up for an account.
-	•	Allow the user to enter a username and password to use as their account credentials. Use a double entry field to ensure the user does not mistakenly enter a password they didn’t mean to.
-	•	Create an identification number for the user (UserID).
-	•	Create a hash of the entered password using the MD5 hash function and store it into a SQL database alongside the UserID.
+	•	Allow the user to enter a username and password to use as their account credentials. 
+	•	Create a hash of the entered password using the MD5 hash function and store it into a SQL database.
 	•	Also store the user’s username into the database for login purposes.
 	•	Allow the user to log in to their account.
 	•	Allow the user to enter their username and password into the system.
