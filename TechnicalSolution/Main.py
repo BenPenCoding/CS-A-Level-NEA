@@ -6,6 +6,7 @@ from websockets.asyncio.client import connect
 import pickle
 from GUI import *
 
+#Functions
 async def client(request):
 
     username = globalUsername
@@ -143,7 +144,8 @@ def showLogin(message):
 
     loginWindow.mainloop()
 
-showMenu()
+if __name__ == "__main__":
+    showMenu()
 
 
 
