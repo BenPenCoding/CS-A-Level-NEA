@@ -21,7 +21,7 @@ class Game():	#A class that represents a chess game with attributes such as boar
 			
 		def initializeBoard(self):		#Initializes board, places the Piece objects in the right places			
 			
-				for i in range(8): 		#These nested for loops make every square on the board an empty square. Like a base template
+				for i in range(8): 		#These nested for loops make every square on the board an empty square.
 					for j in range(8):
 						self.board[i].append(Piece("Empty", None, i, j))
 				
@@ -133,7 +133,8 @@ class Game():	#A class that represents a chess game with attributes such as boar
 					takenPiece = self.getPieceAtLocation(move[1][0], move[1][1])
 
 					#Moves the piece to take the takenPiece, basically a barebones implementation of game.move
-					self.setPieceAtLocation(piece.getRank(), piece.getFile(), Piece("Empty", None, piece.getRank(), piece.getFile()))
+					self.setPieceAtLocation(piece.getRank(), piece.getFile(), 
+						Piece("Empty", None, piece.getRank(), piece.getFile()))
 					self.setPieceAtLocation(move[1][0], move[1][1], piece)
 					piece.setBoardCoords(move[1][0], move[1][1])
 
@@ -185,7 +186,8 @@ class Game():	#A class that represents a chess game with attributes such as boar
 					takenPiece = self.getPieceAtLocation(move[1][0], move[1][1])
 
 					#Moves the piece to take the takenPiece, basically a barebones implementation of game.move
-					self.setPieceAtLocation(piece.getRank(), piece.getFile(), Piece("Empty", None, piece.getRank(), piece.getFile()))
+					self.setPieceAtLocation(piece.getRank(), piece.getFile(), 
+						Piece("Empty", None, piece.getRank(), piece.getFile()))
 					self.setPieceAtLocation(move[1][0], move[1][1], piece)
 					piece.setBoardCoords(move[1][0], move[1][1])
 
@@ -262,7 +264,7 @@ class Game():	#A class that represents a chess game with attributes such as boar
 			"Empty":"",				
 			"Rook":"R"}				
 
-			#The dictionary that the program uses to determine the alphabetical representation of a coordinate
+			#The dictionary that the program uses to get the alphabetical representation of a coordinate
 			locationTypeDict =  {0: 'a',					
 			1: 'b',
 			2: 'c',
@@ -273,7 +275,9 @@ class Game():	#A class that represents a chess game with attributes such as boar
 			7: 'h'}
 
 			#Checks if the opposite king is in check following this move
-			check = ""			#With algebraic move notation, if the oppositions king is in check, a '+' is added to the end. Assuming it's not in check, check is set to nothing
+			#With algebraic move notation, if the oppositions king is in check, a '+' is added to the end.
+			#Assuming it's not in check, check is set to nothing
+			check = ""			
 			colour = "White" if startPiece.getPieceColour() == "Black" else "Black"		#Reverses colour
 
 			if self.getKing(colour).isPieceInCheck():	
@@ -284,13 +288,15 @@ class Game():	#A class that represents a chess game with attributes such as boar
 				else:
 					check = "+"		#If the oppositions king is in check, add a '+' to the end.
 			
-			#With algebraic move notation, if the move takes another piece, an 'x' is added to the end. Assuming it's not, taking is set to nothing
+			#With algebraic move notation, if the move takes another piece,
+			#an 'x' is added to the end. Assuming it's not, taking is set to nothing
 			taking = ""	
 			if endPiece.getPieceType() != "Empty":		#If not moving to an empty square
 				taking = "x"				#Set taking to 'x'
 
 			#Returns the final algebraic notation
-			return pieceTypeDict[startPiece.getPieceType()] + taking + locationTypeDict[endPiece.getFile()] + str(8-endPiece.getRank()) + check
+			return (pieceTypeDict[startPiece.getPieceType()] + taking + 
+				locationTypeDict[endPiece.getFile()] + str(8-endPiece.getRank()) + check)
 		
 		#A method that returns the board attribute
 		def getBoard(self):
