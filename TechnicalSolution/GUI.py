@@ -1,7 +1,6 @@
 import pygame
 import os
 import time 
-import sys
 from ChessEngine import *
 
 #Classes
