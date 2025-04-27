@@ -431,7 +431,8 @@ def beginTutorial(board, turn, numMoves):		#Begins a chess game against a bot
 										takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
 
 										#Fake move, where the piece is moved, the program checks if the king piece is in check, then highlights the move if not
-										game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), Piece("Empty", None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
+										game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), 
+											Piece("Empty", None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
 										game.setPieceAtLocation(moveLocation[0], moveLocation[1], clickedPiece.piece)																	
 										clickedPiece.piece.setBoardCoords(moveLocation[0], moveLocation[1])
 										
@@ -452,7 +453,8 @@ def beginTutorial(board, turn, numMoves):		#Begins a chess game against a bot
 							firstClickedPiece = returnSelected(displayPieceList)	#Finds the already selected piece, as this will be the piece that's moving
 							secondClickedPiece = clickedPiece						#This is the most recently clicked piece, the piece to be taken
 							
-							if firstClickedPiece == secondClickedPiece or not secondClickedPiece.isHighlighted():	#If both pieces are the same (same piece clicked twice) or the second piece hasn't been highlighted (not a valid move)
+							#If both pieces are the same (same piece clicked twice) or the second piece hasn't been highlighted (not a valid move)
+							if firstClickedPiece == secondClickedPiece or not secondClickedPiece.isHighlighted():	
 								deselectAll(displayPieceList)		#Then deselect and unhighlight all pieces
 								unhighlightAll(displayPieceList)
 							
@@ -724,7 +726,8 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 								for moveLocation in possibleMoveLocations:						#Repeats through all possible move locations
 									takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
 									#Fake move, where the piece is moved, the program checks if the king piece is in check, then highlights the move if not
-									game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), Piece("Empty", None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
+									game.setPieceAtLocation(clickedPiece.piece.getRank(), clickedPiece.piece.getFile(), Piece("Empty",
+										None, clickedPiece.piece.getRank(), clickedPiece.piece.getFile))						
 									game.setPieceAtLocation(moveLocation[0], moveLocation[1], clickedPiece.piece)																	
 									clickedPiece.piece.setBoardCoords(moveLocation[0], moveLocation[1])
 									
@@ -758,7 +761,8 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 	
 							game.move(firstClickedPiece.piece, secondClickedPiece.piece)
 												
-							notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece, displayPieceList[secondRank][secondFile].piece)}"
+							notation = f"{game.getNumMoves()}. {game.getNotation(displayPieceList[firstRank][firstFile].piece,
+								displayPieceList[secondRank][secondFile].piece)}"
 							
 							#Stores the algebraic notation in its respective array
 							if firstClickedPiece.piece.getPieceColour() == "White":
@@ -859,4 +863,3 @@ def beginOfflineMultiplayer(board, turn, numMoves):		#Starts offline multiplayer
 			pygame.display.update()		#Updates the screen
 
 
-pygame.quit()

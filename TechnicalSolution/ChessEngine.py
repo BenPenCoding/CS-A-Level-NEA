@@ -775,38 +775,38 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 			#Iterate through all pieces of the same colour
 			for piece in game.getPieces(kingColour):
 
-						#Stores the piece location and all its possible move locations 
-						pieceRank, pieceFile = piece.getBoardCoords()
-						possibleMoveLocations = piece.getPossibleMoveLocations(game)
+				#Stores the piece location and all its possible move locations 
+				pieceRank, pieceFile = piece.getBoardCoords()
+				possibleMoveLocations = piece.getPossibleMoveLocations(game)
 
-						#Iterates through the list of possible move locations
-						for moveLocation in possibleMoveLocations:
+				#Iterates through the list of possible move locations
+				for moveLocation in possibleMoveLocations:
 
-							#Gets the Piece object for taken piece
-							takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
+					#Gets the Piece object for taken piece
+					takenPiece = game.getPieceAtLocation(moveLocation[0], moveLocation[1])
 
-							#Makes a temporary move to check if the King piece is still in check
-							game.setPieceAtLocation(piece.getRank(), piece.getFile(), Piece("Empty", None, piece.getRank(), piece.getFile()))
-							game.setPieceAtLocation(moveLocation[0], moveLocation[1], piece)
-							piece.setBoardCoords(moveLocation[0], moveLocation[1])
-							
-							#If King piece is not in check following the move
-							if not self.isPieceInCheck():
+					#Makes a temporary move to check if the King piece is still in check
+					game.setPieceAtLocation(piece.getRank(), piece.getFile(), Piece("Empty", None, piece.getRank(), piece.getFile()))
+					game.setPieceAtLocation(moveLocation[0], moveLocation[1], piece)
+					piece.setBoardCoords(moveLocation[0], moveLocation[1])
+					
+					#If King piece is not in check following the move
+					if not self.isPieceInCheck():
 
-								#Return pieces to their original coordinates
-								game.setPieceAtLocation(pieceRank, pieceFile, piece)
-								piece.setBoardCoords(pieceRank, pieceFile)
-								game.setPieceAtLocation(moveLocation[0], moveLocation[1], takenPiece)
-								
-								#Return false, as there exists a move to take the King piece out of check
-								return False
+						#Return pieces to their original coordinates
+						game.setPieceAtLocation(pieceRank, pieceFile, piece)
+						piece.setBoardCoords(pieceRank, pieceFile)
+						game.setPieceAtLocation(moveLocation[0], moveLocation[1], takenPiece)
+						
+						#Return false, as there exists a move to take the King piece out of check
+						return False
 
-							else:
-								
-								#Return pieces to their original coordinates								
-								game.setPieceAtLocation(pieceRank, pieceFile, piece)
-								piece.setBoardCoords(pieceRank, pieceFile)
-								game.setPieceAtLocation(moveLocation[0], moveLocation[1], takenPiece)
+					else:
+						
+						#Return pieces to their original coordinates								
+						game.setPieceAtLocation(pieceRank, pieceFile, piece)
+						piece.setBoardCoords(pieceRank, pieceFile)
+						game.setPieceAtLocation(moveLocation[0], moveLocation[1], takenPiece)
 				
 			#If the end of the iteration is reached and there is no move which would take the King piece out of checkmate, return True				
 			return True
