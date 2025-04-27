@@ -316,17 +316,21 @@ class Game():	#A class that represents a chess game with attributes such as boar
 			#Creates an empty piece at the location of the start piece
 			self.setPieceAtLocation(startRank, startFile, Piece("Empty",None, startRank, startFile))	
 			
-			if endPiece.getPieceColour() == "White":	#If taken piece colour is white, remove it from the list of white pieces
+			#If taken piece colour is white, remove it from the list of white pieces
+			if endPiece.getPieceColour() == "White":
 				self.whitePieces.remove(endPiece)
 
+			#If taken piece colour is black, remove it from the list of black pieces
 			elif endPiece.getPieceColour() == "Black":
-				self.blackPieces.remove(endPiece)		#If taken piece colour is black, remove it from the list of black pieces
+				self.blackPieces.remove(endPiece)	
 
 			else:
 				pass
+			#Sets the taken square to the taking piece
+			self.setPieceAtLocation(endRank, endFile, startPiece)
 
-			self.setPieceAtLocation(endRank, endFile, startPiece)	#Sets the taken square to the taking piece
-			startPiece.setBoardCoords(endRank, endFile)				#Sets the Piece object's coordinates to the new location	
+			#Sets the Piece object's coordinates to the new location
+			startPiece.setBoardCoords(endRank, endFile)					
 			
 			#Reverses whose turn it is 
 			self.turn = "White" if self.turn == "Black" else "Black"
@@ -370,7 +374,8 @@ class Piece():
 		self.File = File                 	#File in the board
 
 	#Methods
-	def getPossibleMoveLocations(self):	#An empty method that will be overridden in the piece subclasses, returns all locations that a piece can move to
+	#An empty method that will be overridden in the piece subclasses, returns all locations that a piece can move to
+	def getPossibleMoveLocations(self):	
 		None
 	
 	#Setters
@@ -380,11 +385,12 @@ class Piece():
 	def setFile(self, File):	#'Setter' for the File attribute, called when a piece is instantiated or moved
 		self.File = File
 
-	def setBoardCoords(self, rank, File):	     #Subroutine that abstracts the individual 'setter' subroutines for board position from the user for simplicity
+	#Subroutine that abstracts the individual 'setter' subroutines for board position from the user for simplicity
+	def setBoardCoords(self, rank, File):	     
 		self.setRank(rank)
 		self.setFile(File)
 		
-	def setPieceType(self, pieceType):	#'Setter' for the pieceType attribute, called when a piece is instantiated or a pawn reaches the other side of the board and can change into another piece
+	def setPieceType(self, pieceType):	#'Setter' for the pieceType attribute, called when a piece is instantiated
 		self.pieceType = pieceType
 
 	def setPieceColour(self, newPieceColour):	#'Setter' for the pieceColour attribute, called when a piece is instantiated 
@@ -400,7 +406,7 @@ class Piece():
 	def getFile(self):	#'Getter' for the File attribute, returns said attribute when called
 		return self.File
 
-	def getBoardCoords(self):	#Subroutine that abstracts the individual 'getter' subroutines for board position from the user for simplicity
+	def getBoardCoords(self):	#Subroutine that abstracts the individual 'getter' subroutines 
 		return self.getRank(), self.getFile()
 
 	def getPieceType(self): 	#'Getter' for the pieceType attribute, returns said attribute when called
@@ -413,7 +419,7 @@ class Piece():
 		return self.timesMoved
 	
 	#Checkers
-	def isPieceEmpty(self):		#'Checker' which returns the bool True if the value of the attribute pieceType is "Empty", meaning that the location that piece takes up is free for another piece to move to
+	def isPieceEmpty(self):		#'Checker' which returns True if the value of the attribute pieceType is "Empty"
 		return True if self.pieceType == "Empty" else False
 			
 
@@ -422,14 +428,16 @@ class Piece():
 		
 class Rook(Piece): 			#A class that represents the rook chess piece, which inherits from the Piece class
 	def __init__(self,pieceType, pieceColour, rank, File):		#The constructor for the Rook class
-		super().__init__(pieceType, pieceColour, rank, File)	#Calls the super constructor from the parent class (Piece class)
+		super().__init__(pieceType, pieceColour, rank, File)	#Calls the constructor from the parent class 
 
 	#A method that returns an array of coordinates that a Piece object can legally move to
-	def getPossibleMoveLocations(self, game):		#A method that returns all locations that a piece can move to
+	def getPossibleMoveLocations(self, game):		#A method that returns all locations a piece can move to
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
-		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move by using the getBoardCoords method 
+		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move
 		
-		rankIncrement, FileIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
+		#Declares two variables which will be used to change the direction of the board search by
+	 	#switching between -1 and 1 to reverse direction.
+		rankIncrement, FileIncrement = 0, 0  	
 		
 		for i in range(4):		#The four cardinal directions
 
@@ -437,23 +445,24 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 			
 			while True:		#A while loop so that all possible move locations in a row are found 
 				match i:	#Python's equivalent of a switch/case statement
-					case 0:		#If the increment variable has a value of 0, test all possible move locations to the right of the piece
+					case 0:	#If the increment variable has a value of 0, test all possible move locations to the right of the piece
 						rankIncrement, FileIncrement = 1, 0
-					case 1:		#If the increment variable has a value of 1, test all possible move locations above the piece
+					case 1:	#If the increment variable has a value of 1, test all possible move locations above the piece
 						rankIncrement, FileIncrement = 0, -1
-					case 2:		#If the increment variable has a value of 2, test all possible move locations to the left of the piece
+					case 2:	#If the increment variable has a value of 2, test all possible move locations to the left of the piece
 						rankIncrement, FileIncrement = -1, 0
-					case 3:		#If the increment variable has a value of 3, test all possible move locations below the piece
+					case 3:	#If the increment variable has a value of 3, test all possible move locations below the piece
 						rankIncrement, FileIncrement = 0, 1
-					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
+					case _:	#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
 						print("Fatal error, Rook class switch/case statement experienced a larger increment value than expected.")
-						quit()		#DEBUG - Quits the program entirely
+						quit()	#DEBUG - Quits the program entirely
 
-				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
-				tempFile += FileIncrement		#Increments the File of the next piece to search by the designated direction-dependent increment
+				tempRank += rankIncrement	#Increments the rank of the next piece to search by the designated increment
+				tempFile += FileIncrement	#Increments the File of the next piece to search by the designated increment
 				
-				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	#Checks if the rank and File of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
-					break									#If this is the case, exit the while loop and begin checking in another direction						
+				#Checks if the rank and File of the next piece to check are actually not on the board                
+				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	
+					break		#If this is the case, exit the while loop and begin checking in another direction						
 				
 				pieceToCheck = game.getPieceAtLocation(tempRank, tempFile)	#Gets the piece object to check 
 
@@ -461,12 +470,14 @@ class Rook(Piece): 			#A class that represents the rook chess piece, which inher
 					possibleMoveLocations.append([tempRank, tempFile]) 	#If it is, add the location to the list of possible move locations
 					continue						#Moves on to checking the next piece
 				else:
-										if (pieceToCheck.getPieceColour() != self.getPieceColour()) :	#If the location contains an oppositely coloured piece which can be taken 
-											possibleMoveLocations.append([tempRank, tempFile])	#Adds the location to the list of possible move locations
-											break							#Stops checking the next piece and exits the while loop
-										
-										else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
-											break	#Stops checking the next piece and exits the while loop
+
+					#If the location contains an oppositely coloured piece which can be taken 
+					if (pieceToCheck.getPieceColour() != self.getPieceColour()) :	
+						possibleMoveLocations.append([tempRank, tempFile])	#Adds the location to the list of possible move locations
+						break							#Stops checking the next piece and exits the while loop
+					
+					else:		#Otherwise the piece to check is the same colour as the piece to move
+						break	#Stops checking the next piece and exits the while loop
 
 		return possibleMoveLocations	#Returns the list of possible move locations to wherever the method was called 
 
@@ -480,7 +491,8 @@ class Bishop(Piece):			#A class that represents the bishop chess piece, which in
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move by using the getBoardCoords method 
 
-		rankIncrement, FileIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to change direction.
+		#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to change direction.
+		rankIncrement, FileIncrement = 0, 0  	
 		
 		for i in range(4):		#The four diagonal directions
 
@@ -503,7 +515,8 @@ class Bishop(Piece):			#A class that represents the bishop chess piece, which in
 				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
 				tempFile += FileIncrement		#Increments the File of the next piece to search by the designated direction-dependent increment
 				
-				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	#Checks if the rank and File of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
+				#Checks if the rank and File of the next piece to check are actually not on the board                
+				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	
 					break									#If this is the case, exit the while loop and begin checking in another direction							
 
 				pieceToCheck = game.getPieceAtLocation(tempRank, tempFile)	#Gets the piece object to check 
@@ -512,44 +525,48 @@ class Bishop(Piece):			#A class that represents the bishop chess piece, which in
 					possibleMoveLocations.append([tempRank, tempFile]) 	#If it is, add the location to the list of possible move locations
 					continue
 				else:	
-										if pieceToCheck.getPieceColour() != self.getPieceColour():	#If the location contains an oppositely coloured piece which can be taken 
-											possibleMoveLocations.append([tempRank, tempFile])		#Adds the location to the list of possible move locations
-											break
-										
-										else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
-											break	#Exits the while loop
+
+					#If the location contains an oppositely coloured piece which can be taken 
+					if pieceToCheck.getPieceColour() != self.getPieceColour():	
+						possibleMoveLocations.append([tempRank, tempFile]) #Adds the location to the list of possible move locations	
+						break
+					
+					else:		#Otherwise the piece to check is the same colour as the piece to move
+						break	#Exits the while loop
 		
 		return possibleMoveLocations	#Returns the list of possible move locations to wherever the method was called 
 
 class Knight(Piece):			#A class that represents the knight chess piece, which inherits from the Piece class
 	def __init__(self,pieceType, pieceColour, rank, File):		#The constructor for the Knight class
-		super().__init__(pieceType, pieceColour, rank, File)	#Calls the super constructor from the parent class (Piece class)
+		super().__init__(pieceType, pieceColour, rank, File)	#Calls the super constructor from the parent class 
 
 	#A method that returns an array of coordinates that a Piece object can legally move to
 	def getPossibleMoveLocations(self, game):
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
-		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move by using the getBoardCoords method 
-		possibleIncrementList = [[-2, 1], [-2, -1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2]]	#Although not obvious, this list contains the increments that must be added to a knight's current location to check the squares it could possibly move to
+		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move
+		possibleIncrementList = [[-2, 1], [-2, -1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2]]	
 		
 		for coordinates in possibleIncrementList:
+			#Declaring and initializing two variables that store the location of the piece to check
+			tempRank, tempFile = pieceRank +coordinates[0], pieceFile + coordinates[1]	
 
-			tempRank, tempFile = pieceRank +coordinates[0], pieceFile + coordinates[1]	#Declaring and initializing two variables that store the location of the piece to check, they're instantiated as the current increment values added to the knight's position 
-
-			if (tempRank < 0 or tempRank > 7) or (tempFile < 0 or tempFile > 7): 	#Checks if the rank and File of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur
+			#Checks if the rank and File of the next piece to check are actually not on the board
+			if (tempRank < 0 or tempRank > 7) or (tempFile < 0 or tempFile > 7): 	
 				continue
 				
 			pieceToCheck = game.getPieceAtLocation(tempRank, tempFile)
 
-			if pieceToCheck.isPieceEmpty():			#Checks if the piece object is empty
+			if pieceToCheck.isPieceEmpty():		#Checks if the piece object is empty
 				possibleMoveLocations.append([tempRank, tempFile]) 	#If it is, add the location to the list of possible move locations
 				continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
 			else:	
-									if (pieceToCheck.getPieceColour() != self.getPieceColour()):	#If the location contains an oppositely coloured piece which can be taken
-										possibleMoveLocations.append([tempRank, tempFile])		#Adds the location to the list of possible move locations
-										continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
-							
-									else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
-										pass	#Nothing happens here, the program returns to the for loop		
+				#If the location contains an oppositely coloured piece which can be taken
+				if (pieceToCheck.getPieceColour() != self.getPieceColour()):	
+					possibleMoveLocations.append([tempRank, tempFile])		#Adds the location to the list of possible move locations
+					continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
+		
+				else:	#Otherwise the piece to check is the same colour as the piece to move
+					pass	#Nothing happens here, the program returns to the for loop		
 		
 		return possibleMoveLocations	#Returns the list of possible move locations to wherever the method was called 
 		
@@ -563,9 +580,10 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 	def getPossibleMoveLocations(self,game):
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
 		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move by using the getBoardCoords method 
-		rankIncrement, FileIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search by switching between -1 and 1 to reverse direction.
+		rankIncrement, FileIncrement = 0, 0  	#Declares two variables which will be used to change the direction of the board search
 
-		#The queen piece can move like a rook and a bishop at the same time, to check for possible move locations I used the same code from both the Bishop class and the Rook class
+		#The queen piece can move like a rook and a bishop at the same time, 
+		#to check for possible move locations I used the same code from both the Bishop class and the Rook class
 		#The code from the Rook class:
 		for i in range(4):		#The four cardinal directions
 
@@ -573,22 +591,23 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 			
 			while True:		#A while loop so that all possible move locations in a row are found 
 				match i:	#Python's equivalent of a switch/case statement
-					case 0:		#If the increment variable has a value of 0, test all possible move locations to the right of the piece
+					case 0:	#If the increment variable has a value of 0, test all possible move locations to the right of the piece
 						rankIncrement, FileIncrement = 1, 0
-					case 1:		#If the increment variable has a value of 1, test all possible move locations above the piece
+					case 1:	#If the increment variable has a value of 1, test all possible move locations above the piece
 						rankIncrement, FileIncrement = 0, -1
-					case 2:		#If the increment variable has a value of 2, test all possible move locations to the left of the piece
+					case 2:	#If the increment variable has a value of 2, test all possible move locations to the left of the piece
 						rankIncrement, FileIncrement = -1, 0
-					case 3:		#If the increment variable has a value of 3, test all possible move locations below the piece
+					case 3:	#If the increment variable has a value of 3, test all possible move locations below the piece
 						rankIncrement, FileIncrement = 0, 1
-					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
+					case _:	#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
 						print("Fatal error, Rook class switch/case statement experienced a larger increment value than expected.")
-						quit()		#DEBUG - Quits the program entirely
+						quit()	#DEBUG - Quits the program entirely
 
-				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
-				tempFile += FileIncrement		#Increments the File of the next piece to search by the designated direction-dependent increment
+				tempRank += rankIncrement	#Increments the rank of the next piece to search by the designated direction-dependent increment
+				tempFile += FileIncrement	#Increments the File of the next piece to search by the designated direction-dependent increment
 				
-				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	#Checks if the rank and File of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
+				#Checks if the rank and File of the next piece to check are actually not on the board
+				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	
 					break	
 				
 				pieceToCheck = game.getPieceAtLocation(tempRank, tempFile)	#Gets the piece object to check 
@@ -597,12 +616,12 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 					possibleMoveLocations.append([tempRank, tempFile]) 	#If it is, add the location to the list of possible move locations
 					continue						#Moves on to checking the next piece
 				else:
-										if (pieceToCheck.getPieceColour() != self.getPieceColour()):	#If the location contains an oppositely coloured piece which can be taken 
-											possibleMoveLocations.append([tempRank, tempFile])	#Adds the location to the list of possible move locations
-											break							#Stops checking the next piece and exits the while loop
-										
-										else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
-											break	#Stops checking the next piece and exits the while loop
+					if (pieceToCheck.getPieceColour() != self.getPieceColour()): #If the location contains an oppositely coloured piece 
+						possibleMoveLocations.append([tempRank, tempFile])	#Adds the location to the list of possible move locations
+						break							#Stops checking the next piece and exits the while loop
+					
+					else:		#Otherwise the piece to check is the same colour as the piece to move, 
+						break	#Stops checking the next piece and exits the while loop
 
 		#The code from the Bishop class:
 		for i in range(4):		#The four diagonal directions
@@ -611,22 +630,23 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 			
 			while True:		#A while loop so that all possible move locations in a diagonal line are found 
 				match i:	#Python's equivalent of a switch/case statement
-					case 0:		#If the increment variable has a value of 0, test all possible move locations to the up and right of the piece
+					case 0:	#If the increment variable has a value of 0, test all possible move locations to the up and right of the piece
 						rankIncrement, FileIncrement = -1, 1
-					case 1:		#If the increment variable has a value of 1, test all possible move locations up and left of the piece
+					case 1:	#If the increment variable has a value of 1, test all possible move locations up and left of the piece
 						rankIncrement, FileIncrement = -1, -1
-					case 2:		#If the increment variable has a value of 2, test all possible move locations to the down and left of the piece
+					case 2:	#If the increment variable has a value of 2, test all possible move locations to the down and left of the piece
 						rankIncrement, FileIncrement = 1, -1
-					case 3:		#If the increment variable has a value of 3, test all possible move locations down and right of the piece
+					case 3:	#If the increment variable has a value of 3, test all possible move locations down and right of the piece
 						rankIncrement, FileIncrement = 1, 1
-					case _:		#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
+					case _:	#DEBUG - If the increment variable has a value not inside 0 <= i <= 3 then print the nature of the error
 						print("Fatal error, Bishop class switch/case statement experienced a larger increment value than expected.")
-						quit()		#DEBUG - Quits the program entirely
+						quit()	#DEBUG - Quits the program entirely
 
-				tempRank += rankIncrement		#Increments the rank of the next piece to search by the designated direction-dependent increment
-				tempFile += FileIncrement		#Increments the File of the next piece to search by the designated direction-dependent increment
+				tempRank += rankIncrement	#Increments the rank of the next piece to search by the designated direction-dependent increment
+				tempFile += FileIncrement	#Increments the File of the next piece to search by the designated direction-dependent increment
 				
-				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	#Checks if the rank and File of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur                  
+				#Checks if the rank and File of the next piece to check are actually not on the board                 
+				if tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0:	
 					break									#If this is the case, exit the while loop and begin checking in another direction							
 				
 				pieceToCheck = game.getPieceAtLocation(tempRank, tempFile)	#Gets the piece object to check 
@@ -635,13 +655,13 @@ class Queen(Piece):			#A class that represents the queen chess piece, which inhe
 					possibleMoveLocations.append([tempRank, tempFile]) 	#If it is, add the location to the list of possible move locations
 					continue
 				else:
-										if (pieceToCheck.getPieceColour() != self.getPieceColour()):	#If the location contains an oppositely coloured piece which can be taken 
-											possibleMoveLocations.append([tempRank, tempFile])		#Adds the location to the list of possible move locations
-											break
-										
-										else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
-											break	#Exits the while loop
-		
+					if (pieceToCheck.getPieceColour() != self.getPieceColour()):	#If the location contains an oppositely coloured piece
+						possibleMoveLocations.append([tempRank, tempFile])		#Adds the location to the list of possible move locations
+						break
+					
+					else:		#Otherwise the piece to check is the same colour as the piece to move
+						break	#Exits the while loop
+
 		return possibleMoveLocations	#Returns the list of possible move locations to wherever the method was called 
 	
 
@@ -655,7 +675,7 @@ class Pawn(Piece):			#A class that represents the pawn chess piece, which inheri
 			possibleMoveLocations = []		#Declaring the array to add possible move locations to
 			pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move by using the getBoardCoords method 
 
-			if self.pieceColour == "White":	#This if statement initializes an inrement variable, i, which will alter the direction of the pawns movement depending on its colour
+			if self.pieceColour == "White":	#This if statement initializes an inrement variable, i
 				i = 1
 			else:
 				i= -1
@@ -669,13 +689,15 @@ class Pawn(Piece):			#A class that represents the pawn chess piece, which inheri
 			#Checks the Piece object in front of and to the right of the Pawn, if an opposing Piece, add it to the possible move locations
 			tempRank, tempFile = pieceRank + (-1 * i), pieceFile + 1
 			if  not (tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0):      
-				if (game.getPieceAtLocation(tempRank, tempFile).getPieceColour() != self.getPieceColour()) and (game.getPieceAtLocation(tempRank, tempFile).getPieceType() != "Empty"):
+				if ((game.getPieceAtLocation(tempRank, tempFile).getPieceColour() != self.getPieceColour()) and 
+				(game.getPieceAtLocation(tempRank, tempFile).getPieceType() != "Empty")):
 					possibleMoveLocations.append([tempRank, tempFile])
 			
 			#Checks the Piece object in front of and to the left of the Pawn, if an opposing Piece, add it to the possible move locations
 			tempRank, tempFile = pieceRank + (-1 * i), pieceFile - 1
 			if  not (tempRank > 7 or tempRank < 0 or tempFile > 7 or tempFile < 0):      
-				if (game.getPieceAtLocation(tempRank, tempFile).getPieceColour() != self.getPieceColour())  and (game.getPieceAtLocation(tempRank, tempFile).getPieceType() != "Empty"):
+				if ((game.getPieceAtLocation(tempRank, tempFile).getPieceColour() != self.getPieceColour()) and 
+					(game.getPieceAtLocation(tempRank, tempFile).getPieceType() != "Empty")):
 					possibleMoveLocations.append([tempRank, tempFile])
 
 			#Checks the Piece object if it has moved more than once. If not, check two spaces in front of the Pawn,
@@ -696,14 +718,17 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 	def getPossibleMoveLocations(self, game):
 
 		possibleMoveLocations = []		#Declaring the array to add possible move locations to
-		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move by using the getBoardCoords method 
-		possibleIncrementList = [[-1, -1],[-1, 0],[-1, 1], [0,-1],[0, 1],[1, -1],[1, 0],[1, 1]]	#This list contains the increments that must be added to a king's current location to check the squares it could possibly move to
+		pieceRank, pieceFile = self.getBoardCoords()	#Gets the rank and File of the piece to move
+		possibleIncrementList = [[-1, -1],[-1, 0],[-1, 1], [0,-1],[0, 1],[1, -1],[1, 0],[1, 1]]	
 
 		for coordinates in possibleIncrementList:
 			pieceRank, pieceFile = self.getBoardCoords()
-			tempRank, tempFile = pieceRank +coordinates[0], pieceFile + coordinates[1]	#Declaring and initializing two variables that store the location of the piece to check, they're instantiated as the current increment values added to the knight's position 
 
-			if (tempRank < 0 or tempRank > 7 or tempFile < 0 or tempFile > 7):	#Checks if the rank and File of the next piece to check are actually not on the board and therefore if a "IndexError: list index out of range" error will occur
+			#Declaring and initializing two variables that store the location of the piece to check
+			tempRank, tempFile = pieceRank +coordinates[0], pieceFile + coordinates[1]	
+
+			#Checks if the rank and File of the next piece to check are actually not on the board 
+			if (tempRank < 0 or tempRank > 7 or tempFile < 0 or tempFile > 7):	
 				continue
 				
 			pieceToCheck = game.getPieceAtLocation(tempRank, tempFile)
@@ -711,12 +736,13 @@ class King(Piece):			#A class that represents the king chess piece, which inheri
 			if pieceToCheck.isPieceEmpty():			#Checks if the piece object is empty
 				possibleMoveLocations.append([tempRank, tempFile]) 	#If it is, add the location to the list of possible move locations
 				continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
-					
-			elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	#If the location contains an oppositely coloured piece which can be taken (all except the king)
+				
+			#If the location contains an oppositely coloured piece which can be taken (all except the king)
+			elif (pieceToCheck.getPieceColour() != self.getPieceColour()) and pieceToCheck.getPieceType != "King":	
 				possibleMoveLocations.append([tempRank, tempFile])		#Adds the location to the list of possible move locations
 				continue		#Skips the rest of the for loop as we have found the state of the piece and returns to the top of the loop
 				
-			else:		#Otherwise the piece to check is the same colour as the piece to move, or it's the opposition's king piece (which can't be taken)
+			else:		#Otherwise the piece to check is the same colour as the piece to move
 				pass	#Nothing happens here, the program returns to the for loop		
 
 		return possibleMoveLocations	#Returns the list of possible move locations to wherever the method was called 
