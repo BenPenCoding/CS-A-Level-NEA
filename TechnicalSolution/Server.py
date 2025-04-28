@@ -175,7 +175,7 @@ def saveGame(username, gameName, board, turn, numMoves):
         connection.close()
         return False, "Save unsuccessful, game name already exists"
 
-#Function that returns the name of all saved games a user has created 
+#Function that returns the name of saved games a user has created 
 def getAvailableSaves(username):
 
     #Create connection to the database
@@ -313,4 +313,3 @@ async def runServer():
 
 #Activates the server listening on port 8765 until the program is stopped
 asyncio.run(runServer())
-
